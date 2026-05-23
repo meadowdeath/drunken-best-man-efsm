@@ -18,4 +18,6 @@ public static class GameLimits
     public const int MinMoney = 0;
     public const int MinMemoryThreshold = 35;
     public const int MaxMemoryThreshold = 50;
+    public const int RequiredDrunkennessForMemory = 65;
+    public const int DrivingDrunkennessLimit = 85;
 }
