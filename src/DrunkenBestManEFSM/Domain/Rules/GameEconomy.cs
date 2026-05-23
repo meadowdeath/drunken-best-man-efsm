@@ -34,4 +34,7 @@ public static class GameEconomy
 
     public const int PassiveHangoverIncrease = 3;
     public const int PassiveDrunkennessReduction = 5;
+
+    public const int WalkHangoverIncrease = 2;
+    public const int WalkDrunkennessReduction = 3;
 }
