@@ -1,0 +1,16 @@
+flowchart TD
+    Presentation["Presentation\nConsole UI"]
+    Application["Application\nUse Cases and Orchestration"]
+    Domain["Domain\nEFSM Rules and Game State"]
+    Infrastructure["Infrastructure\nXML Text Provider"]
+    NoteDomain["Domain has no outward dependency"]
+    NotePresentation["Presentation does not directly read XML"]
+    NoteInfrastructure["Infrastructure does not contain game rules"]
+
+    Presentation --> Application
+    Application --> Domain
+    Infrastructure --> Application
+
+    Domain -.-> NoteDomain
+    Presentation -.-> NotePresentation
+    Infrastructure -.-> NoteInfrastructure
