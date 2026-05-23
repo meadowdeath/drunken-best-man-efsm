@@ -1,0 +1,33 @@
+flowchart TD
+    A["Start Turn"]
+    B["Display Stats"]
+    C["Display Available Actions"]
+    D["Player Chooses Action"]
+    E["Validate Conditions"]
+    F{"Valid Action?"}
+    G["Show Error"]
+    H["Remain in Current State"]
+    I["Apply Action Effects"]
+    J["Apply Passive Effects"]
+    K["Roll Random Event"]
+    L["Check Victory/Defeat"]
+    M{"Continue Game?"}
+    N["Start Next Turn"]
+    O["End Game"]
+
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    E --> F
+    F -- "No" --> G
+    G --> H
+    H --> C
+    F -- "Yes" --> I
+    I --> J
+    J --> K
+    K --> L
+    L --> M
+    M -- "Yes" --> N
+    N --> A
+    M -- "No" --> O

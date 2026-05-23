@@ -1,0 +1,25 @@
+flowchart TD
+    A["Current Location + Action + GameState"]
+    B["Condition Evaluation"]
+    C{"Allowed?"}
+    D["Show Error"]
+    E["Remain at Current Location"]
+    F["Effect Application"]
+    G["Passive Turn Effects"]
+    H["Random Event Roll"]
+    I["Victory/Defeat Check"]
+    J{"Game Ended?"}
+    K["Victory or Defeat"]
+    L["New Location + Updated GameState"]
+
+    A --> B
+    B --> C
+    C -- "No" --> D
+    D --> E
+    C -- "Yes" --> F
+    F --> G
+    G --> H
+    H --> I
+    I --> J
+    J -- "Yes" --> K
+    J -- "No" --> L
