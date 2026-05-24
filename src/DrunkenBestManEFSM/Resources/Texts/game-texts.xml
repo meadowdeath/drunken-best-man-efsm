@@ -5,6 +5,44 @@
   <Text key="Game.NoActiveGame">No game is currently active.</Text>
   <Text key="Game.Status">Current status</Text>
 
+  <Text key="Menu.Main.Title">Drunken Best Man EFSM</Text>
+  <Text key="Menu.Main.Start">Start new game</Text>
+  <Text key="Menu.Main.Exit">Exit</Text>
+  <Text key="Menu.Main.ChooseOption">Choose an option: </Text>
+  <Text key="Menu.Game.ChooseAction">Choose an action: </Text>
+  <Text key="Menu.Game.ChooseDestination">Choose a destination: </Text>
+  <Text key="Menu.Game.TravelMode">Travel Mode</Text>
+  <Text key="Menu.Game.ChooseTravelMode">Choose a travel mode: </Text>
+  <Text key="Menu.Game.ActionUnavailable">That action is not available.</Text>
+  <Text key="Menu.Cancel">Cancel</Text>
+  <Text key="Menu.Cancelled">Cancelled. No time passes.</Text>
+  <Text key="Menu.Back">Exit to main menu</Text>
+  <Text key="Menu.Confirm">Continue? (Y/N): </Text>
+  <Text key="Menu.ConfirmPurchase">Continue with purchase? (Y/N): </Text>
+  <Text key="Menu.ConfirmTravel">Confirm Travel</Text>
+  <Text key="Menu.ConfirmChurch">Enter this church?</Text>
+  <Text key="Menu.ConfirmRings">Pick up the wedding rings?</Text>
+  <Text key="Menu.InvalidOption">Invalid option.</Text>
+  <Text key="Menu.PressEnter">Press Enter to continue...</Text>
+
+  <Text key="Status.CurrentLocation">Current Location:</Text>
+  <Text key="Status.CarLocation">Car Location:</Text>
+  <Text key="Status.CarElsewhere">car is elsewhere</Text>
+  <Text key="Status.Health">Health:</Text>
+  <Text key="Status.Hangover">Hangover:</Text>
+  <Text key="Status.Drunkenness">Drunkenness:</Text>
+  <Text key="Status.Fuel">Fuel:</Text>
+  <Text key="Status.RemainingTime">Time:</Text>
+  <Text key="Status.Money">Money:</Text>
+  <Text key="Status.Rings">Rings:</Text>
+  <Text key="Status.CorrectChurchKnown">Church Known:</Text>
+  <Text key="Status.CorrectChurch">Correct Church:</Text>
+
+  <Text key="Shop.Electrolytes.Summary">Buy Electrolytes</Text>
+  <Text key="Shop.Fuel.Summary">Buy Fuel</Text>
+  <Text key="Shop.Alcohol.Summary">Buy Alcohol</Text>
+  <Text key="Shop.RemainingTimeLimit">RemainingTime cannot exceed</Text>
+
   <Text key="UseCase.Game.Started">A new game has started.</Text>
   <Text key="UseCase.Game.NoActiveGame">Start a game before taking actions.</Text>
   <Text key="UseCase.Action.Completed">Action completed.</Text>

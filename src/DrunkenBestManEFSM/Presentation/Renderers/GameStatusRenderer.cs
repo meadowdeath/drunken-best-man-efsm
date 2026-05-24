@@ -17,24 +17,26 @@ public sealed class GameStatusRenderer
 
     public void Render(GameStatusDto status)
     {
-        printer.WriteSection(textProvider.GetText("Game.Status"));
-        printer.WriteLine($"Location: {GetLocationName(status.CurrentLocation)}");
-        printer.WriteLine($"Car Location: {GetLocationName(status.CarLocation)}");
-        printer.WriteLine($"Health: {status.Health} / 100");
-        printer.WriteLine($"Hangover: {status.Hangover} / 100");
-        printer.WriteLine($"Drunkenness: {status.Drunkenness} / 100");
-        printer.WriteLine($"Fuel: {status.Fuel} / 100");
-        printer.WriteLine($"Remaining Time: {status.RemainingTime} minutes");
-        printer.WriteLine($"Money: {status.Money}");
-        printer.WriteLine($"Rings: {FormatBoolean(status.HasRings)}");
-        printer.WriteLine($"Correct Church Known: {FormatBoolean(status.CorrectChurchKnown)}");
+        printer.WriteSection("LOCATION");
+        printer.WriteLine($"{textProvider.GetText("Status.CurrentLocation"),-18} {GetLocationName(status.CurrentLocation)}");
+        printer.WriteLine($"{textProvider.GetText("Status.CarLocation"),-18} {GetLocationName(status.CarLocation)}{GetCarWarning(status)}");
+
+        printer.WriteSection("STATS");
+        printer.WriteLine($"{textProvider.GetText("Status.Health"),-18} {status.Health} / 100");
+        printer.WriteLine($"{textProvider.GetText("Status.Hangover"),-18} {status.Hangover} / 100");
+        printer.WriteLine($"{textProvider.GetText("Status.Drunkenness"),-18} {status.Drunkenness} / 100");
+        printer.WriteLine($"{textProvider.GetText("Status.Fuel"),-18} {status.Fuel} / 100");
+        printer.WriteLine($"{textProvider.GetText("Status.RemainingTime"),-18} {status.RemainingTime} min");
+        printer.WriteLine($"{textProvider.GetText("Status.Money"),-18} ${status.Money}");
+        printer.WriteLine($"{textProvider.GetText("Status.Rings"),-18} {FormatBoolean(status.HasRings)}");
+        printer.WriteLine($"{textProvider.GetText("Status.CorrectChurchKnown"),-18} {FormatBoolean(status.CorrectChurchKnown)}");
 
         if (status.CorrectChurchToDisplay is not null)
         {
-            printer.WriteLine($"Correct Church: {GetText($"Location.{status.CorrectChurchToDisplay}")}");
+            printer.WriteLine($"{textProvider.GetText("Status.CorrectChurch"),-18} {GetText($"Location.{status.CorrectChurchToDisplay}")}");
         }
 
-        printer.WriteLine($"Result: {status.Result}");
+        printer.WriteLine($"{"Result:",-18} {status.Result}");
     }
 
     private string GetLocationName(object location) =>
@@ -45,4 +47,9 @@ public sealed class GameStatusRenderer
 
     private static string FormatBoolean(bool value) =>
         value ? "Yes" : "No";
+
+    private string GetCarWarning(GameStatusDto status) =>
+        status.CarLocation == status.CurrentLocation
+            ? string.Empty
+            : $" ({textProvider.GetText("Status.CarElsewhere")})";
 }

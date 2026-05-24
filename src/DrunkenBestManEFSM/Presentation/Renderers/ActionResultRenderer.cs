@@ -22,7 +22,7 @@ public sealed class ActionResultRenderer
     {
         printer.WriteSection("Result");
 
-        if (result.Success)
+        if (result.Success || result.MessageKey == "Menu.Cancelled")
         {
             printer.WriteLine(textProvider.GetText(result.MessageKey));
         }

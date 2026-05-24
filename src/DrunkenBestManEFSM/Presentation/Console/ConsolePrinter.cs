@@ -32,6 +32,15 @@ public sealed class ConsolePrinter
     public void WriteEmptyLine() =>
         global::System.Console.WriteLine();
 
-    public void Clear() =>
-        global::System.Console.Clear();
+    public void Clear()
+    {
+        try
+        {
+            global::System.Console.Clear();
+        }
+        catch (IOException)
+        {
+            WriteEmptyLine();
+        }
+    }
 }

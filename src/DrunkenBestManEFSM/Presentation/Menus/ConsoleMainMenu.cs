@@ -35,12 +35,12 @@ public sealed class ConsoleMainMenu
         while (true)
         {
             printer.Clear();
-            printer.WriteTitle(textProvider.GetText("Game.Title"));
-            printer.WriteLine("1. Start new game");
-            printer.WriteLine("2. Exit");
+            printer.WriteTitle(textProvider.GetText("Menu.Main.Title"));
+            printer.WriteLine($"1. {textProvider.GetText("Menu.Main.Start")}");
+            printer.WriteLine($"2. {textProvider.GetText("Menu.Main.Exit")}");
             printer.WriteEmptyLine();
 
-            var choice = inputReader.ReadIntInRange("Choose an option: ", 1, 2);
+            var choice = inputReader.ReadIntInRange(textProvider.GetText("Menu.Main.ChooseOption"), 1, 2);
             if (choice == 2)
             {
                 return;

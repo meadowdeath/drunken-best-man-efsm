@@ -1,3 +1,5 @@
+using DrunkenBestManEFSM.Application.Contracts;
+
 namespace DrunkenBestManEFSM.Presentation.Console;
 
 /// <summary>
@@ -5,6 +7,13 @@ namespace DrunkenBestManEFSM.Presentation.Console;
 /// </summary>
 public sealed class ConsoleInputReader
 {
+    private readonly ITextProvider textProvider;
+
+    public ConsoleInputReader(ITextProvider textProvider)
+    {
+        this.textProvider = textProvider;
+    }
+
     public string ReadRequiredText(string prompt)
     {
         while (true)
@@ -17,7 +26,7 @@ public sealed class ConsoleInputReader
                 return input.Trim();
             }
 
-            global::System.Console.WriteLine("Please enter a value.");
+            global::System.Console.WriteLine(textProvider.GetText("Menu.InvalidOption"));
         }
     }
 
@@ -32,7 +41,7 @@ public sealed class ConsoleInputReader
                 return value;
             }
 
-            global::System.Console.WriteLine($"Please enter a number between {min} and {max}.");
+            global::System.Console.WriteLine($"{textProvider.GetText("Menu.InvalidOption")} ({min}-{max})");
         }
     }
 
@@ -42,7 +51,26 @@ public sealed class ConsoleInputReader
     public void WaitForEnter()
     {
         global::System.Console.WriteLine();
-        global::System.Console.Write("Press Enter to continue...");
+        global::System.Console.Write(textProvider.GetText("Menu.PressEnter"));
         global::System.Console.ReadLine();
+    }
+
+    public bool ReadConfirmation(string prompt)
+    {
+        while (true)
+        {
+            var input = ReadRequiredText(prompt);
+            if (input.Equals("y", StringComparison.OrdinalIgnoreCase) || input.Equals("yes", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            if (input.Equals("n", StringComparison.OrdinalIgnoreCase) || input.Equals("no", StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
+            global::System.Console.WriteLine(textProvider.GetText("Menu.InvalidOption"));
+        }
     }
 }

@@ -17,7 +17,7 @@ public sealed class AvailableActionsRenderer
 
     public void Render(IReadOnlyList<AvailableActionDto> actions)
     {
-        printer.WriteSection("Available Actions");
+        printer.WriteSection("AVAILABLE ACTIONS");
 
         for (var index = 0; index < actions.Count; index++)
         {
@@ -29,5 +29,7 @@ public sealed class AvailableActionsRenderer
 
             printer.WriteLine($"{index + 1}. {label}{suffix}");
         }
+
+        printer.WriteLine($"0. {textProvider.GetText("Menu.Back")}");
     }
 }

@@ -59,6 +59,41 @@ public sealed class GameQueryService
             .ToList();
     }
 
+    public ShopActionSummaryDto? GetShopActionSummary(ActionType actionType) =>
+        actionType switch
+        {
+            ActionType.BuyElectrolytes => new ShopActionSummaryDto
+            {
+                ActionType = actionType,
+                TitleKey = "Shop.Electrolytes.Summary",
+                Cost = GameEconomy.ElectrolyteCost,
+                HealthChange = GameEconomy.ElectrolyteHealthGain,
+                HangoverChange = -GameEconomy.ElectrolyteHangoverReduction,
+                DrunkennessChange = -GameEconomy.ElectrolyteDrunkennessReduction,
+                RemainingTimeChange = -GameEconomy.ElectrolyteTimeCost
+            },
+            ActionType.BuyFuel => new ShopActionSummaryDto
+            {
+                ActionType = actionType,
+                TitleKey = "Shop.Fuel.Summary",
+                Cost = GameEconomy.FuelCost,
+                FuelChange = GameEconomy.FuelGain,
+                RemainingTimeChange = -GameEconomy.FuelPurchaseTimeCost
+            },
+            ActionType.BuyAlcohol => new ShopActionSummaryDto
+            {
+                ActionType = actionType,
+                TitleKey = "Shop.Alcohol.Summary",
+                Cost = GameEconomy.AlcoholCost,
+                HealthChange = -GameEconomy.AlcoholHealthCost,
+                HangoverChange = -GameEconomy.AlcoholHangoverReduction,
+                DrunkennessChange = GameEconomy.AlcoholDrunkennessIncrease,
+                RemainingTimeChange = GameEconomy.AlcoholTimeGain,
+                RemainingTimeLimit = GameLimits.MaxRemainingTime
+            },
+            _ => null
+        };
+
     public GameStatusDto ToStatusDto(GameState state)
     {
         var stats = state.CharacterStats;
