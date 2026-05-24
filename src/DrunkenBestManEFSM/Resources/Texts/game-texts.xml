@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GameTexts>
+  <Text key="Game.Title">Drunken Best Man EFSM</Text>
+  <Text key="Game.Started">A drunken best man wakes up at the strip club. The rings are missing, the phone is dead, and the wedding starts soon.</Text>
+  <Text key="Game.NoActiveGame">No game is currently active.</Text>
+  <Text key="Game.Status">Current status</Text>
+
+  <Text key="UseCase.Game.Started">A new game has started.</Text>
+  <Text key="UseCase.Game.NoActiveGame">Start a game before taking actions.</Text>
+  <Text key="UseCase.Action.Completed">Action completed.</Text>
+  <Text key="UseCase.Action.Failed">Action failed.</Text>
+
+  <Text key="Rules.Travel.InvalidDestination">That destination is not valid.</Text>
+  <Text key="Rules.Travel.RouteNotFound">There is no known route to that destination.</Text>
+  <Text key="Rules.Travel.CannotWalk">Walking is not possible right now.</Text>
+  <Text key="Rules.Travel.CannotDrive">Driving is not possible right now.</Text>
+  <Text key="Rules.Travel.NotEnoughFuel">There is not enough fuel for that drive.</Text>
+  <Text key="Rules.Travel.CarNotHere">The car is not at your current location.</Text>
+  <Text key="Rules.Travel.TooDrunkToDrive">You are too drunk to drive.</Text>
+  <Text key="Rules.Travel.NotEnoughTime">There is not enough time for that trip.</Text>
+  <Text key="Rules.Travel.NoDestinations">There are no destinations available from here.</Text>
+
+  <Text key="Actions.Shop.BuyElectrolytes.Success">You buy electrolytes and feel slightly less doomed.</Text>
+  <Text key="Actions.Shop.BuyFuel.Success">You buy fuel. The car may yet betray you later, but not from an empty tank.</Text>
+  <Text key="Actions.Shop.BuyAlcohol.Success">You buy alcohol. It helps for the wrong reasons.</Text>
+  <Text key="Rules.Shop.Electrolytes.WrongLocation">Electrolytes are only available at the gas station.</Text>
+  <Text key="Rules.Shop.Fuel.WrongLocation">Fuel is only available at the gas station.</Text>
+  <Text key="Rules.Shop.Alcohol.WrongLocation">Alcohol is only available at the bar.</Text>
+  <Text key="Rules.Shop.NotEnoughMoney">You do not have enough money.</Text>
+  <Text key="Rules.Shop.Fuel.Full">The fuel tank is already full.</Text>
+  <Text key="Rules.Shop.Alcohol.HealthTooLow">You are too fragile to survive another drink.</Text>
+  <Text key="Rules.Shop.Alcohol.TimeLimitReached">You cannot stretch your borrowed confidence any further.</Text>
+  <Text key="Rules.Shop.Alcohol.NotAllowed">Buying alcohol is not allowed right now.</Text>
+
+  <Text key="Actions.Rings.PickUp.Success">You pick up the wedding rings.</Text>
+  <Text key="Rules.Rings.WrongLocation">The rings are waiting at the jewelry store.</Text>
+  <Text key="Rules.Rings.AlreadyPickedUp">You already have the rings.</Text>
+  <Text key="Rules.Rings.NotEnoughTime">There is not enough time to pick up the rings.</Text>
+
+  <Text key="Actions.Church.Enter.Victory">You enter the correct church with the rings. Somehow, the wedding is saved.</Text>
+  <Text key="Actions.Church.Enter.WrongChurch">Wrong church. The stained glass judges you silently.</Text>
+  <Text key="Actions.Church.Enter.CorrectChurchMissingRings">This is the right church, but you still do not have the rings.</Text>
+  <Text key="Rules.Church.NotAtChurch">You are not at a church.</Text>
+
+  <Text key="Actions.CheckStats.Success">You check your condition and inventory.</Text>
+
+  <Text key="RandomEvent.None">Nothing unexpected happens.</Text>
+  <Text key="RandomEvent.Vomit">You vomit. It is awful, but at least your body has made a decision.</Text>
+  <Text key="RandomEvent.FindMoney">You find some money in a place best left unexplained.</Text>
+
+  <Text key="Rules.Game.Defeat.Time">Time runs out before you reach the wedding.</Text>
+  <Text key="Rules.Game.Defeat.Health">Your health reaches zero and the mission ends.</Text>
+  <Text key="Rules.Game.Defeat.Dehydration">The hangover wins. Dehydration ends the journey.</Text>
+  <Text key="Rules.Game.Victory">You deliver the rings in time.</Text>
+
+  <Text key="Location.StripClub">Strip Club</Text>
+  <Text key="Location.GasStation">Gas Station</Text>
+  <Text key="Location.JewelryStore">Jewelry Store</Text>
+  <Text key="Location.Bar">Bar</Text>
+  <Text key="Location.LostLoveParish">Lost Love Parish</Text>
+  <Text key="Location.ForbiddenRoseChapel">Forbidden Rose Chapel</Text>
+  <Text key="Location.LastGoodbyeSanctuary">Last Goodbye Sanctuary</Text>
+  <Text key="Location.SecretsOfTheSoulChurch">Secrets of the Soul Church</Text>
+  <Text key="Location.FinalDestinyCathedral">Final Destiny Cathedral</Text>
+  <Text key="Location.Victory">Victory</Text>
+  <Text key="Location.Defeat">Defeat</Text>
+
+  <Text key="Action.Travel">Travel</Text>
+  <Text key="Action.BuyElectrolytes">Buy Electrolytes</Text>
+  <Text key="Action.BuyFuel">Buy Fuel</Text>
+  <Text key="Action.BuyAlcohol">Buy Alcohol</Text>
+  <Text key="Action.PickUpRings">Pick Up Rings</Text>
+  <Text key="Action.EnterChurch">Enter Church</Text>
+  <Text key="Action.CheckStats">Check Stats</Text>
+
+  <Text key="Actions.Travel.Label">Travel</Text>
+  <Text key="Actions.Shop.BuyElectrolytes.Label">Buy Electrolytes</Text>
+  <Text key="Actions.Shop.BuyFuel.Label">Buy Fuel</Text>
+  <Text key="Actions.Shop.BuyAlcohol.Label">Buy Alcohol</Text>
+  <Text key="Actions.Rings.PickUp.Label">Pick Up Rings</Text>
+  <Text key="Actions.Church.Enter.Label">Enter Church</Text>
+  <Text key="Actions.CheckStats.Label">Check Stats</Text>
+
+  <Text key="Actions.Travel.Success">You make it to the next location.</Text>
+
+  <Text key="TravelMode.Walk">Walk</Text>
+  <Text key="TravelMode.Drive">Drive</Text>
+</GameTexts>
