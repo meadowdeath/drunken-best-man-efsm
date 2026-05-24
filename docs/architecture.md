@@ -148,18 +148,18 @@ Intended structure:
 
 ```text
 src/DrunkenBestManEFSM/
-├── Domain/
-├── Application/
-├── Infrastructure/
-├── Presentation/
-├── Resources/
-│   └── Texts/
-└── Program.cs
+|-- Domain/
+|-- Application/
+|-- Infrastructure/
+|-- Presentation/
+|-- Resources/
+|   `-- Texts/
+`-- Program.cs
 
 docs/
-├── architecture.md
-├── efsm-model.md
-└── diagrams/
+|-- architecture.md
+|-- efsm-model.md
+`-- diagrams/
 
 tests/
 ```
@@ -173,3 +173,4 @@ This structure makes the project easier to evolve from a console game to other i
 ## Diagram
 
 - [Layered architecture](diagrams/layered-architecture.mmd)
+- [State ownership](diagrams/state-ownership.mmd)

@@ -23,7 +23,7 @@ This game is not a simple finite state machine because transitions do not depend
 The transition notation is:
 
 ```text
-δ(CurrentLocation, Action, GameState) [Condition] / Effect -> NewLocation, UpdatedGameState
+delta(CurrentLocation, Action, GameState) [Condition] / Effect -> NewLocation, UpdatedGameState
 ```
 
 Each part means:
@@ -200,7 +200,7 @@ The player loses if:
 ### Example 1: Driving from StripClub to GasStation
 
 ```text
-δ(StripClub, DriveTo(GasStation), GameState)
+delta(StripClub, DriveTo(GasStation), GameState)
 [
     CarLocation == StripClub
     && Fuel >= RequiredFuel
@@ -218,7 +218,7 @@ The player loses if:
 ### Example 2: Buying electrolytes at GasStation
 
 ```text
-δ(GasStation, BuyElectrolytes, GameState)
+delta(GasStation, BuyElectrolytes, GameState)
 [
     Money >= ElectrolyteCost
 ]
@@ -235,7 +235,7 @@ The player loses if:
 ### Example 3: Buying alcohol at Bar
 
 ```text
-δ(Bar, BuyAlcohol, GameState)
+delta(Bar, BuyAlcohol, GameState)
 [
     Money >= AlcoholCost
     && Health > AlcoholHealthCost
@@ -254,7 +254,7 @@ The player loses if:
 ### Example 4: Entering the correct church with rings
 
 ```text
-δ(CorrectChurch, EnterChurch, GameState)
+delta(CorrectChurch, EnterChurch, GameState)
 [
     HasRings == true
     && RemainingTime > 0
@@ -270,3 +270,5 @@ The player loses if:
 
 - [EFSM state flow](diagrams/efsm-state-flow.mmd)
 - [Turn flow](diagrams/turn-flow.mmd)
+- [Game map](diagrams/game-map.mmd)
+- [Resource pressure](diagrams/resource-pressure.mmd)

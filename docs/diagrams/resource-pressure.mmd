@@ -1,0 +1,23 @@
+flowchart TD
+    Turn["Turn Passes"]
+    Hangover["Hangover increases"]
+    Drunkenness["Drunkenness decreases"]
+    Electrolytes["Buy Electrolytes"]
+    Alcohol["Buy Alcohol"]
+    Vomit["Vomit Event"]
+    Drive["Driving"]
+    Walk["Walking"]
+    Defeat["Defeat Risk"]
+
+    Turn --> Hangover
+    Turn --> Drunkenness
+    Electrolytes -->|"Health up"| Hangover
+    Electrolytes -->|"Hangover down"| Drunkenness
+    Alcohol -->|"RemainingTime up"| Drunkenness
+    Alcohol -->|"Health down"| Hangover
+    Drunkenness -->|"too high blocks"| Drive
+    Drunkenness -->|"higher risk"| Vomit
+    Vomit -->|"Health down, Hangover up"| Defeat
+    Hangover -->|"reaches 100"| Defeat
+    Walk -->|"no fuel, more time"| Hangover
+    Drive -->|"less time, costs fuel"| Turn

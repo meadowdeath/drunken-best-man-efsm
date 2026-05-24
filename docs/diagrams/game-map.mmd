@@ -1,0 +1,25 @@
+flowchart LR
+    StripClub["StripClub"]
+    GasStation["GasStation"]
+    JewelryStore["JewelryStore"]
+    Bar["Bar"]
+    LostLoveParish["LostLoveParish"]
+    ForbiddenRoseChapel["ForbiddenRoseChapel"]
+    LastGoodbyeSanctuary["LastGoodbyeSanctuary"]
+    SecretsOfTheSoulChurch["SecretsOfTheSoulChurch"]
+    FinalDestinyCathedral["FinalDestinyCathedral"]
+
+    StripClub ---|"Medium"| GasStation
+    StripClub ---|"Near"| Bar
+    GasStation ---|"Medium"| JewelryStore
+    GasStation ---|"Near"| Bar
+    JewelryStore ---|"Medium"| LostLoveParish
+    JewelryStore ---|"Medium"| ForbiddenRoseChapel
+    JewelryStore ---|"Medium"| LastGoodbyeSanctuary
+    JewelryStore ---|"Far"| SecretsOfTheSoulChurch
+    JewelryStore ---|"Far"| FinalDestinyCathedral
+    LostLoveParish ---|"Near"| ForbiddenRoseChapel
+    ForbiddenRoseChapel ---|"Near"| LastGoodbyeSanctuary
+    LastGoodbyeSanctuary ---|"Near"| SecretsOfTheSoulChurch
+    SecretsOfTheSoulChurch ---|"Near"| FinalDestinyCathedral
+    FinalDestinyCathedral ---|"Medium"| LostLoveParish

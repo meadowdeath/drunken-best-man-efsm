@@ -1,0 +1,17 @@
+flowchart TD
+    Presentation["Presentation\nConsole menus and renderers"]
+    Application["Application\nUse cases and DTOs"]
+    Domain["Domain\nRules, effects, maps, transitions"]
+    Infrastructure["Infrastructure\nXML text and random providers"]
+    GameState["GameState\nExtended EFSM state"]
+    Texts["game-texts.xml"]
+
+    Presentation -->|"calls services"| Application
+    Presentation -->|"displays DTOs"| Application
+    Application -->|"requests transition"| Domain
+    Application -->|"owns active session"| GameState
+    Domain -->|"validates and mutates through effects"| GameState
+    Infrastructure -->|"implements contracts"| Application
+    Infrastructure -->|"loads"| Texts
+
+    Domain -. "no Console, XML, or Infrastructure dependency" .-> Domain
