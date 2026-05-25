@@ -5,11 +5,11 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72D-47B6-A68D-7590B98EB39B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrunkenBestManEFSM", "src\DrunkenBestManEFSM\DrunkenBestManEFSM.csproj", "{42862299-DA1F-4914-A18F-F1608008AB9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DrunkenBestManEFSM", "src\DrunkenBestManEFSM\DrunkenBestManEFSM.csproj", "{42862299-DA1F-4914-A18F-F1608008AB9D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0AB3BF05-4346-4AA6-1389-037BE0695223}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrunkenBestManEFSM.Tests", "tests\DrunkenBestManEFSM.Tests\DrunkenBestManEFSM.Tests.csproj", "{6255A1CC-BFA6-440D-8BC9-543650DB40E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DrunkenBestManEFSM.Tests", "tests\DrunkenBestManEFSM.Tests\DrunkenBestManEFSM.Tests.csproj", "{6255A1CC-BFA6-440D-8BC9-543650DB40E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
