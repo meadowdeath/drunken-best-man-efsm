@@ -1,4 +1,5 @@
 using DrunkenBestManEFSM.Application.Contracts;
+using DrunkenBestManEFSM.Application.DTOs;
 using DrunkenBestManEFSM.Application.Results;
 using DrunkenBestManEFSM.Domain.Enums;
 using DrunkenBestManEFSM.Presentation.Console;
@@ -18,7 +19,7 @@ public sealed class ActionResultRenderer
         this.statusRenderer = statusRenderer;
     }
 
-    public void Render(UseCaseResult result)
+    public void Render(UseCaseResult<GameActionResultDto> result)
     {
         printer.WriteSection("Result");
 
@@ -31,21 +32,41 @@ public sealed class ActionResultRenderer
             printer.WriteError(textProvider.GetText(result.MessageKey));
         }
 
-        if (result.ActionResult is not null)
+        var actionResult = result.Data?.ActionResult;
+        if (actionResult is not null)
         {
-            printer.WriteLine(textProvider.GetText(result.ActionResult.MessageKey));
+            printer.WriteLine(textProvider.GetText(actionResult.MessageKey));
 
-            if (result.ActionResult.RandomEvent is { Occurred: true } randomEvent)
+            if (actionResult.RandomEvent is { Occurred: true } randomEvent)
             {
                 printer.WriteLine(textProvider.GetText($"RandomEvent.{randomEvent.EventType}"));
             }
 
-            RenderOutcomeMessage(result.ActionResult.GameResult);
+            RenderOutcomeMessage(actionResult.GameResult);
         }
 
-        if (result.GameStatus is not null)
+        if (result.Data?.GameStatus is not null)
         {
-            statusRenderer.Render(result.GameStatus);
+            statusRenderer.Render(result.Data.GameStatus);
+        }
+    }
+
+    public void Render(UseCaseResult<GameStatusDto> result)
+    {
+        printer.WriteSection("Result");
+
+        if (result.Success)
+        {
+            printer.WriteLine(textProvider.GetText(result.MessageKey));
+        }
+        else
+        {
+            printer.WriteError(textProvider.GetText(result.MessageKey));
+        }
+
+        if (result.Data is not null)
+        {
+            statusRenderer.Render(result.Data);
         }
     }
 

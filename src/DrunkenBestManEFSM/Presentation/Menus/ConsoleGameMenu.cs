@@ -48,8 +48,9 @@ public sealed class ConsoleGameMenu
         {
             printer.Clear();
 
-            var status = queryService.GetStatus();
-            if (status is null)
+            var statusResult = queryService.GetStatus();
+            var status = statusResult.Data;
+            if (!statusResult.Success || status is null)
             {
                 printer.WriteError(textProvider.GetText("UseCase.Game.NoActiveGame"));
                 inputReader.WaitForEnter();
@@ -64,7 +65,7 @@ public sealed class ConsoleGameMenu
                 return;
             }
 
-            var actions = queryService.GetAvailableActions();
+            var actions = queryService.GetAvailableActions().Data ?? [];
             actionsRenderer.Render(actions);
             var action = ReadAction(actions);
             if (action is null)
@@ -96,7 +97,7 @@ public sealed class ConsoleGameMenu
         return actions[choice - 1];
     }
 
-    private UseCaseResult ExecuteAction(AvailableActionDto action) =>
+    private UseCaseResult<GameActionResultDto> ExecuteAction(AvailableActionDto action) =>
         action.ActionType switch
         {
             ActionType.Travel => ExecuteTravel(),
@@ -115,9 +116,9 @@ public sealed class ConsoleGameMenu
             _ => actionService.CheckStats()
         };
 
-    private UseCaseResult ExecuteTravel()
+    private UseCaseResult<GameActionResultDto> ExecuteTravel()
     {
-        var destinations = queryService.GetAvailableDestinations();
+        var destinations = queryService.GetAvailableDestinations().Data ?? [];
         destinationsRenderer.Render(destinations);
 
         var destinationChoice = inputReader.ReadIntInRange(textProvider.GetText("Menu.Game.ChooseDestination"), 0, destinations.Count);
@@ -157,9 +158,11 @@ public sealed class ConsoleGameMenu
         return actionService.TravelTo(destination.Destination, travelMode);
     }
 
-    private UseCaseResult ExecutePurchase(ActionType actionType, Func<UseCaseResult> execute)
+    private UseCaseResult<GameActionResultDto> ExecutePurchase(
+        ActionType actionType,
+        Func<UseCaseResult<GameActionResultDto>> execute)
     {
-        var summary = queryService.GetShopActionSummary(actionType);
+        var summary = queryService.GetShopActionSummary(actionType).Data;
         if (summary is not null)
         {
             printer.WriteSection(textProvider.GetText(summary.TitleKey));
@@ -180,7 +183,10 @@ public sealed class ConsoleGameMenu
         return execute();
     }
 
-    private UseCaseResult ExecuteConfirmedAction(string titleKey, string descriptionKey, Func<UseCaseResult> execute)
+    private UseCaseResult<GameActionResultDto> ExecuteConfirmedAction(
+        string titleKey,
+        string descriptionKey,
+        Func<UseCaseResult<GameActionResultDto>> execute)
     {
         printer.WriteSection(textProvider.GetText(titleKey));
         printer.WriteLine(textProvider.GetText(descriptionKey));
@@ -193,12 +199,15 @@ public sealed class ConsoleGameMenu
         return execute();
     }
 
-    private UseCaseResult CreateCancelledResult() =>
+    private UseCaseResult<GameActionResultDto> CreateCancelledResult() =>
         new()
         {
             Success = false,
             MessageKey = "Menu.Cancelled",
-            GameStatus = queryService.GetStatus()
+            Data = new GameActionResultDto
+            {
+                GameStatus = queryService.GetStatus().Data
+            }
         };
 
     private static string FormatShopEffects(ShopActionSummaryDto summary)

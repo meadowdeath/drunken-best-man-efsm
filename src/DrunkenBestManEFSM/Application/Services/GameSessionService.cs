@@ -19,19 +19,14 @@ public sealed class GameSessionService
         this.randomProvider = randomProvider;
     }
 
-    public UseCaseResult StartNewGame()
+    public UseCaseResult<GameStatusDto> StartNewGame()
     {
         var correctChurch = randomProvider.PickOne(ChurchCatalog.GetChurches());
         var memoryThreshold = randomProvider.Next(GameLimits.MinMemoryThreshold, GameLimits.MaxMemoryThreshold + 1);
 
         currentState = GameStateFactory.CreateInitialState(correctChurch, memoryThreshold);
 
-        return new UseCaseResult
-        {
-            Success = true,
-            MessageKey = "UseCase.Game.Started",
-            GameStatus = ToStatusDto(currentState)
-        };
+        return UseCaseResult<GameStatusDto>.Ok(ToStatusDto(currentState), "UseCase.Game.Started");
     }
 
     public GameState? GetCurrentState() =>

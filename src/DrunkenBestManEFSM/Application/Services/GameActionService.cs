@@ -1,3 +1,4 @@
+using DrunkenBestManEFSM.Application.DTOs;
 using DrunkenBestManEFSM.Application.Results;
 using DrunkenBestManEFSM.Domain.Enums;
 using DrunkenBestManEFSM.Domain.Results;
@@ -19,7 +20,7 @@ public sealed class GameActionService
         this.queryService = queryService;
     }
 
-    public UseCaseResult TravelTo(Location destination, TravelMode travelMode) =>
+    public UseCaseResult<GameActionResultDto> TravelTo(Location destination, TravelMode travelMode) =>
         Execute(new TransitionRequest
         {
             ActionType = ActionType.Travel,
@@ -27,34 +28,30 @@ public sealed class GameActionService
             TravelMode = travelMode
         });
 
-    public UseCaseResult BuyElectrolytes() =>
+    public UseCaseResult<GameActionResultDto> BuyElectrolytes() =>
         Execute(new TransitionRequest { ActionType = ActionType.BuyElectrolytes });
 
-    public UseCaseResult BuyFuel() =>
+    public UseCaseResult<GameActionResultDto> BuyFuel() =>
         Execute(new TransitionRequest { ActionType = ActionType.BuyFuel });
 
-    public UseCaseResult BuyAlcohol() =>
+    public UseCaseResult<GameActionResultDto> BuyAlcohol() =>
         Execute(new TransitionRequest { ActionType = ActionType.BuyAlcohol });
 
-    public UseCaseResult PickUpRings() =>
+    public UseCaseResult<GameActionResultDto> PickUpRings() =>
         Execute(new TransitionRequest { ActionType = ActionType.PickUpRings });
 
-    public UseCaseResult EnterChurch() =>
+    public UseCaseResult<GameActionResultDto> EnterChurch() =>
         Execute(new TransitionRequest { ActionType = ActionType.EnterChurch });
 
-    public UseCaseResult CheckStats() =>
+    public UseCaseResult<GameActionResultDto> CheckStats() =>
         Execute(new TransitionRequest { ActionType = ActionType.CheckStats });
 
-    private UseCaseResult Execute(TransitionRequest request)
+    private UseCaseResult<GameActionResultDto> Execute(TransitionRequest request)
     {
         var state = sessionService.GetCurrentState();
         if (state is null)
         {
-            return new UseCaseResult
-            {
-                Success = false,
-                MessageKey = "UseCase.Game.NoActiveGame"
-            };
+            return UseCaseResult<GameActionResultDto>.Fail("UseCase.Game.NoActiveGame");
         }
 
         var actionResult = EfsmTransitionResolver.Resolve(state, request);
@@ -62,12 +59,15 @@ public sealed class GameActionService
         return CreateResult(actionResult);
     }
 
-    private UseCaseResult CreateResult(ActionResult actionResult) =>
+    private UseCaseResult<GameActionResultDto> CreateResult(ActionResult actionResult) =>
         new()
         {
             Success = actionResult.Success,
             MessageKey = actionResult.Success ? "UseCase.Action.Completed" : "UseCase.Action.Failed",
-            ActionResult = actionResult,
-            GameStatus = queryService.GetStatus()
+            Data = new GameActionResultDto
+            {
+                ActionResult = actionResult,
+                GameStatus = queryService.GetStatus().Data
+            }
         };
 }

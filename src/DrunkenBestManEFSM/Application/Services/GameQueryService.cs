@@ -1,4 +1,5 @@
 using DrunkenBestManEFSM.Application.DTOs;
+using DrunkenBestManEFSM.Application.Results;
 using DrunkenBestManEFSM.Domain.Enums;
 using DrunkenBestManEFSM.Domain.Maps;
 using DrunkenBestManEFSM.Domain.Models;
@@ -18,23 +19,25 @@ public sealed class GameQueryService
         this.sessionService = sessionService;
     }
 
-    public GameStatusDto? GetStatus()
+    public UseCaseResult<GameStatusDto> GetStatus()
     {
         var state = sessionService.GetCurrentState();
-        return state is null ? null : ToStatusDto(state);
+        return state is null
+            ? UseCaseResult<GameStatusDto>.Fail("UseCase.Game.NoActiveGame")
+            : UseCaseResult<GameStatusDto>.Ok(ToStatusDto(state), "UseCase.Action.Completed");
     }
 
-    public IReadOnlyList<AvailableActionDto> GetAvailableActions()
+    public UseCaseResult<IReadOnlyList<AvailableActionDto>> GetAvailableActions()
     {
         var state = sessionService.GetCurrentState();
         if (state is null)
         {
-            return [];
+            return UseCaseResult<IReadOnlyList<AvailableActionDto>>.Fail("UseCase.Game.NoActiveGame");
         }
 
         var hasDestinations = TravelMap.GetDestinationsFrom(state.CurrentLocation).Count > 0;
 
-        return
+        IReadOnlyList<AvailableActionDto> actions =
         [
             CreateAction(ActionType.CheckStats, isAvailable: true, "Actions.CheckStats.Label"),
             CreateAction(ActionType.Travel, hasDestinations, "Actions.Travel.Label", hasDestinations ? null : "Rules.Travel.NoDestinations"),
@@ -44,23 +47,28 @@ public sealed class GameQueryService
             CreateAction(ActionType.PickUpRings, RingRules.CanPickUpRings(state), "Actions.Rings.PickUp.Label", GetRingsUnavailableReason(state)),
             CreateAction(ActionType.EnterChurch, ChurchRules.CanEnterChurch(state), "Actions.Church.Enter.Label", ChurchRules.CanEnterChurch(state) ? null : "Rules.Church.NotAtChurch")
         ];
+
+        return UseCaseResult<IReadOnlyList<AvailableActionDto>>.Ok(actions, "UseCase.Action.Completed");
     }
 
-    public IReadOnlyList<AvailableDestinationDto> GetAvailableDestinations()
+    public UseCaseResult<IReadOnlyList<AvailableDestinationDto>> GetAvailableDestinations()
     {
         var state = sessionService.GetCurrentState();
         if (state is null)
         {
-            return [];
+            return UseCaseResult<IReadOnlyList<AvailableDestinationDto>>.Fail("UseCase.Game.NoActiveGame");
         }
 
-        return TravelMap.GetDestinationsFrom(state.CurrentLocation)
+        var destinations = TravelMap.GetDestinationsFrom(state.CurrentLocation)
             .Select(destination => CreateDestination(state, destination))
             .ToList();
+
+        return UseCaseResult<IReadOnlyList<AvailableDestinationDto>>.Ok(destinations, "UseCase.Action.Completed");
     }
 
-    public ShopActionSummaryDto? GetShopActionSummary(ActionType actionType) =>
-        actionType switch
+    public UseCaseResult<ShopActionSummaryDto> GetShopActionSummary(ActionType actionType)
+    {
+        var summary = actionType switch
         {
             ActionType.BuyElectrolytes => new ShopActionSummaryDto
             {
@@ -93,6 +101,11 @@ public sealed class GameQueryService
             },
             _ => null
         };
+
+        return summary is null
+            ? UseCaseResult<ShopActionSummaryDto>.Fail("UseCase.Action.Failed")
+            : UseCaseResult<ShopActionSummaryDto>.Ok(summary, "UseCase.Action.Completed");
+    }
 
     public GameStatusDto ToStatusDto(GameState state)
     {

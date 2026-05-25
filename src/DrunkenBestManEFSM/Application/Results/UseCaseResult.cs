@@ -1,15 +1,30 @@
-using DrunkenBestManEFSM.Application.DTOs;
-using DrunkenBestManEFSM.Domain.Results;
-
 namespace DrunkenBestManEFSM.Application.Results;
 
-public sealed class UseCaseResult
+public class UseCaseResult<T>
 {
-    public bool Success { get; set; }
+    public bool Success { get; init; }
 
-    public string MessageKey { get; set; } = string.Empty;
+    public string MessageKey { get; init; } = string.Empty;
 
-    public ActionResult? ActionResult { get; set; }
+    public T? Data { get; init; }
 
-    public GameStatusDto? GameStatus { get; set; }
+    public static UseCaseResult<T> Ok(T data, string messageKey)
+    {
+        return new UseCaseResult<T>
+        {
+            Success = true,
+            MessageKey = messageKey,
+            Data = data
+        };
+    }
+
+    public static UseCaseResult<T> Fail(string messageKey)
+    {
+        return new UseCaseResult<T>
+        {
+            Success = false,
+            MessageKey = messageKey,
+            Data = default
+        };
+    }
 }
