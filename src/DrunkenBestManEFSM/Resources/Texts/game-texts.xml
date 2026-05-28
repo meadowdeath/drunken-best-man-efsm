@@ -41,6 +41,7 @@
   <Text key="Shop.Electrolytes.Summary">Buy Electrolytes</Text>
   <Text key="Shop.Fuel.Summary">Buy Fuel</Text>
   <Text key="Shop.Alcohol.Summary">Buy Alcohol</Text>
+  <Text key="Shop.StripClubRest.Summary">Spend time at the Strip Club</Text>
   <Text key="Shop.RemainingTimeLimit">RemainingTime cannot exceed</Text>
 
   <Text key="UseCase.Game.Started">A new game has started.</Text>
@@ -61,6 +62,7 @@
   <Text key="Actions.Shop.BuyElectrolytes.Success">You buy electrolytes and feel slightly less doomed.</Text>
   <Text key="Actions.Shop.BuyFuel.Success">You buy fuel. The car may yet betray you later, but not from an empty tank.</Text>
   <Text key="Actions.Shop.BuyAlcohol.Success">You buy alcohol. It helps for the wrong reasons.</Text>
+  <Text key="Actions.StripClub.Rest.Success">You spend some time at the Strip Club and feel a little more alive.</Text>
   <Text key="Rules.Shop.Electrolytes.WrongLocation">Electrolytes are only available at the gas station.</Text>
   <Text key="Rules.Shop.Fuel.WrongLocation">Fuel is only available at the gas station.</Text>
   <Text key="Rules.Shop.Alcohol.WrongLocation">Alcohol is only available at the bar.</Text>
@@ -69,6 +71,11 @@
   <Text key="Rules.Shop.Alcohol.HealthTooLow">You are too fragile to survive another drink.</Text>
   <Text key="Rules.Shop.Alcohol.TimeLimitReached">You cannot stretch your borrowed confidence any further.</Text>
   <Text key="Rules.Shop.Alcohol.NotAllowed">Buying alcohol is not allowed right now.</Text>
+  <Text key="Rules.StripClub.WrongLocation">That recovery option is only available at the Strip Club.</Text>
+  <Text key="Rules.StripClub.NotEnoughMoney">You do not have enough money for that.</Text>
+  <Text key="Rules.StripClub.HealthFull">Your health is already full.</Text>
+  <Text key="Rules.StripClub.NotEnoughTime">There is not enough time for that.</Text>
+  <Text key="Rules.StripClub.InvalidHealthGain">The recovery amount is not valid.</Text>
 
   <Text key="Actions.Rings.PickUp.Success">You pick up the wedding rings.</Text>
   <Text key="Rules.Rings.WrongLocation">The rings are waiting at the jewelry store.</Text>
@@ -107,6 +114,7 @@
   <Text key="Action.BuyElectrolytes">Buy Electrolytes</Text>
   <Text key="Action.BuyFuel">Buy Fuel</Text>
   <Text key="Action.BuyAlcohol">Buy Alcohol</Text>
+  <Text key="Action.RestAtStripClub">Recover at Strip Club</Text>
   <Text key="Action.PickUpRings">Pick Up Rings</Text>
   <Text key="Action.EnterChurch">Enter Church</Text>
   <Text key="Action.CheckStats">Check Stats</Text>
@@ -115,6 +123,7 @@
   <Text key="Actions.Shop.BuyElectrolytes.Label">Buy Electrolytes</Text>
   <Text key="Actions.Shop.BuyFuel.Label">Buy Fuel</Text>
   <Text key="Actions.Shop.BuyAlcohol.Label">Buy Alcohol</Text>
+  <Text key="Actions.StripClub.Rest.Label">Recover at Strip Club</Text>
   <Text key="Actions.Rings.PickUp.Label">Pick Up Rings</Text>
   <Text key="Actions.Church.Enter.Label">Enter Church</Text>
   <Text key="Actions.CheckStats.Label">Check Stats</Text>

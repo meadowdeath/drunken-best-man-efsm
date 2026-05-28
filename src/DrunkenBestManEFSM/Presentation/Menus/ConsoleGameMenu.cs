@@ -104,6 +104,7 @@ public sealed class ConsoleGameMenu
             ActionType.BuyElectrolytes => ExecutePurchase(ActionType.BuyElectrolytes, actionService.BuyElectrolytes),
             ActionType.BuyFuel => ExecutePurchase(ActionType.BuyFuel, actionService.BuyFuel),
             ActionType.BuyAlcohol => ExecutePurchase(ActionType.BuyAlcohol, actionService.BuyAlcohol),
+            ActionType.RestAtStripClub => ExecutePurchase(ActionType.RestAtStripClub, actionService.RestAtStripClub),
             ActionType.PickUpRings => ExecuteConfirmedAction(
                 "Actions.Rings.PickUp.Label",
                 "Menu.ConfirmRings",
@@ -213,12 +214,23 @@ public sealed class ConsoleGameMenu
     private static string FormatShopEffects(ShopActionSummaryDto summary)
     {
         var effects = new List<string>();
-        AddEffect(effects, "Health", summary.HealthChange);
+        AddHealthEffect(effects, summary);
         AddEffect(effects, "Hangover", summary.HangoverChange);
         AddEffect(effects, "Drunkenness", summary.DrunkennessChange);
         AddEffect(effects, "Fuel", summary.FuelChange);
         AddEffect(effects, "min", summary.RemainingTimeChange);
         return string.Join(", ", effects);
+    }
+
+    private static void AddHealthEffect(List<string> effects, ShopActionSummaryDto summary)
+    {
+        if (summary.MinHealthChange is not null && summary.MaxHealthChange is not null)
+        {
+            effects.Add($"+{summary.MinHealthChange} to +{summary.MaxHealthChange} Health");
+            return;
+        }
+
+        AddEffect(effects, "Health", summary.HealthChange);
     }
 
     private static void AddEffect(List<string> effects, string label, int value)
