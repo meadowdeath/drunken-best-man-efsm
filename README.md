@@ -39,6 +39,7 @@ This is an EFSM because transitions depend not only on location and action, but 
 - Start at `StripClub`.
 - Drive or walk between locations.
 - Manage fuel, money, time, health, hangover, and drunkenness.
+- Spend money at `StripClub` for a risky recovery option that restores a random amount of health.
 - Buy electrolytes and fuel at `GasStation`.
 - Buy alcohol at `Bar` as a risky shortcut.
 - Pick up rings at `JewelryStore`.
@@ -51,9 +52,11 @@ This is an EFSM because transitions depend not only on location and action, but 
 
 Losing all health causes defeat. Vomiting and alcohol can reduce health.
 
+The `StripClub` provides a paid recovery option that restores a random amount of health and consumes time. This gives the starting location a tactical purpose without making recovery free or guaranteed.
+
 ### Hangover
 
-Hangover represents dehydration and physical deterioration. It increases passively, electrolytes reduce it, and reaching `100` causes defeat by dehydration.
+Hangover represents dehydration and physical deterioration. It increases passively, electrolytes reduce it, and reaching `100` causes defeat by dehydration. Electrolytes are primarily a hangover recovery tool and should only provide limited health recovery.
 
 ### Drunkenness
 

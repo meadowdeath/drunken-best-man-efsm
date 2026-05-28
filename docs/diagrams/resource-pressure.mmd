@@ -3,6 +3,7 @@ flowchart TD
     Hangover["Hangover increases"]
     Drunkenness["Drunkenness decreases"]
     Electrolytes["Buy Electrolytes"]
+    StripClub["Strip Club Recovery"]
     Alcohol["Buy Alcohol"]
     Vomit["Vomit Event"]
     Drive["Driving"]
@@ -11,8 +12,10 @@ flowchart TD
 
     Turn --> Hangover
     Turn --> Drunkenness
-    Electrolytes -->|"Health up"| Hangover
     Electrolytes -->|"Hangover down"| Drunkenness
+    Electrolytes -->|"limited Health up"| Hangover
+    StripClub -->|"random Health up"| Turn
+    StripClub -->|"costs money and time"| Hangover
     Alcohol -->|"RemainingTime up"| Drunkenness
     Alcohol -->|"Health down"| Hangover
     Drunkenness -->|"too high blocks"| Drive

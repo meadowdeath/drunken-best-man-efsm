@@ -14,7 +14,7 @@ The correct church is selected randomly during gameplay from five possible churc
 - SecretsOfTheSoulChurch
 - FinalDestinyCathedral
 
-The player starts at `StripClub`. The car also starts at `StripClub`. The player has limited fuel, enough to drive to the `GasStation`. The player must eventually go to the `GasStation` to buy electrolytes and fuel, go to the `JewelryStore` to pick up the rings, identify the correct church, and reach it before losing by time, health, or dehydration.
+The player starts at `StripClub`. The car also starts at `StripClub`. The player has limited fuel, enough to drive to the `GasStation`. The `StripClub` can also provide a costly recovery option that restores a random amount of health after the player spends some time enjoying a service offered by the venue. The player must eventually go to the `GasStation` to buy electrolytes and fuel, go to the `JewelryStore` to pick up the rings, identify the correct church, and reach it before losing by time, health, or dehydration.
 
 ## EFSM Definition
 
@@ -134,6 +134,7 @@ Location actions:
 - `BuyElectrolytes`
 - `BuyFuel`
 - `BuyAlcohol`
+- `RestAtStripClub`
 - `PickUpRings`
 - `EnterChurch`
 - `CheckStats`
@@ -151,7 +152,9 @@ Passive effects per turn:
 
 ## Conceptual Mechanics
 
-Electrolytes cost money, increase health, reduce hangover, slightly reduce drunkenness, and consume a small amount of time.
+Electrolytes cost money, reduce hangover, slightly reduce drunkenness, provide only limited health recovery, and consume a small amount of time. Their main purpose is real recovery from dehydration and exhaustion, not full healing.
+
+The Strip Club recovery action costs money, consumes time, and restores a random amount of health within a configured range. This gives the starting location a strategic purpose and separates health recovery from electrolyte recovery. The random health gain should be selected outside the Domain layer, then passed into the domain effect so the rule/effect logic remains testable.
 
 Alcohol costs money, reduces hangover slightly, increases drunkenness, reduces health, and increases remaining time up to a defined cap. This represents the character feeling artificially functional, not literal time travel. This mechanic is risky because drunkenness increases vomit probability and may block driving.
 
@@ -251,7 +254,24 @@ delta(Bar, BuyAlcohol, GameState)
 -> Bar, UpdatedGameState
 ```
 
-### Example 4: Entering the correct church with rings
+### Example 4: Recovering at the Strip Club
+
+```text
+delta(StripClub, RestAtStripClub, GameState)
+[
+    Money >= StripClubServiceCost
+    && Health < MaxHealth
+    && RemainingTime > StripClubServiceTimeCost
+]
+/
+    Money -= StripClubServiceCost
+    Health += RandomHealthGain
+    RemainingTime -= StripClubServiceTimeCost
+    ApplyPassiveTurnEffects()
+-> StripClub, UpdatedGameState
+```
+
+### Example 5: Entering the correct church with rings
 
 ```text
 delta(CorrectChurch, EnterChurch, GameState)
