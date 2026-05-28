@@ -12,6 +12,10 @@ public sealed class ShopActionSummaryDto
 
     public int HealthChange { get; set; }
 
+    public int? MinHealthChange { get; set; }
+
+    public int? MaxHealthChange { get; set; }
+
     public int HangoverChange { get; set; }
 
     public int DrunkennessChange { get; set; }

@@ -13,7 +13,7 @@ IRandomProvider randomProvider = new SystemRandomProvider();
 
 var sessionService = new GameSessionService(randomProvider);
 var queryService = new GameQueryService(sessionService);
-var actionService = new GameActionService(sessionService, queryService);
+var actionService = new GameActionService(sessionService, queryService, randomProvider);
 
 var inputReader = new ConsoleInputReader(textProvider);
 var printer = new ConsolePrinter();

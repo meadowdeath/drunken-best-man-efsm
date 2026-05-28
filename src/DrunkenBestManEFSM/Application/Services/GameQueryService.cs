@@ -44,6 +44,7 @@ public sealed class GameQueryService
             CreateAction(ActionType.BuyElectrolytes, IsAtGasStation(state) && ShopRules.CanBuyElectrolytes(state), "Actions.Shop.BuyElectrolytes.Label", GetElectrolytesUnavailableReason(state)),
             CreateAction(ActionType.BuyFuel, IsAtGasStation(state) && ShopRules.CanBuyFuel(state), "Actions.Shop.BuyFuel.Label", GetFuelUnavailableReason(state)),
             CreateAction(ActionType.BuyAlcohol, state.CurrentLocation == Location.Bar && ShopRules.CanBuyAlcohol(state), "Actions.Shop.BuyAlcohol.Label", GetAlcoholUnavailableReason(state)),
+            CreateAction(ActionType.RestAtStripClub, state.CurrentLocation == Location.StripClub && ShopRules.CanRestAtStripClub(state), "Actions.StripClub.Rest.Label", GetStripClubRestUnavailableReason(state)),
             CreateAction(ActionType.PickUpRings, RingRules.CanPickUpRings(state), "Actions.Rings.PickUp.Label", GetRingsUnavailableReason(state)),
             CreateAction(ActionType.EnterChurch, ChurchRules.CanEnterChurch(state), "Actions.Church.Enter.Label", ChurchRules.CanEnterChurch(state) ? null : "Rules.Church.NotAtChurch")
         ];
@@ -98,6 +99,15 @@ public sealed class GameQueryService
                 DrunkennessChange = GameEconomy.AlcoholDrunkennessIncrease,
                 RemainingTimeChange = GameEconomy.AlcoholTimeGain,
                 RemainingTimeLimit = GameLimits.MaxRemainingTime
+            },
+            ActionType.RestAtStripClub => new ShopActionSummaryDto
+            {
+                ActionType = actionType,
+                TitleKey = "Shop.StripClubRest.Summary",
+                Cost = GameEconomy.StripClubServiceCost,
+                MinHealthChange = GameEconomy.StripClubServiceMinHealthGain,
+                MaxHealthChange = GameEconomy.StripClubServiceMaxHealthGain,
+                RemainingTimeChange = -GameEconomy.StripClubServiceTimeCost
             },
             _ => null
         };
@@ -212,6 +222,28 @@ public sealed class GameQueryService
         }
 
         return state.CharacterStats.Drunkenness < GameLimits.MaxDrunkenness ? null : "Rules.Shop.Alcohol.NotAllowed";
+    }
+
+    private static string? GetStripClubRestUnavailableReason(GameState state)
+    {
+        if (state.CurrentLocation != Location.StripClub)
+        {
+            return "Rules.StripClub.WrongLocation";
+        }
+
+        if (state.CharacterStats.Money < GameEconomy.StripClubServiceCost)
+        {
+            return "Rules.StripClub.NotEnoughMoney";
+        }
+
+        if (state.CharacterStats.Health >= GameLimits.MaxHealth)
+        {
+            return "Rules.StripClub.HealthFull";
+        }
+
+        return state.CharacterStats.RemainingTime > GameEconomy.StripClubServiceTimeCost
+            ? null
+            : "Rules.StripClub.NotEnoughTime";
     }
 
     private static string? GetRingsUnavailableReason(GameState state)

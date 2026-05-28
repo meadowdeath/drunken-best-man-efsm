@@ -1,7 +1,9 @@
+using DrunkenBestManEFSM.Application.Contracts;
 using DrunkenBestManEFSM.Application.DTOs;
 using DrunkenBestManEFSM.Application.Results;
 using DrunkenBestManEFSM.Domain.Enums;
 using DrunkenBestManEFSM.Domain.Results;
+using DrunkenBestManEFSM.Domain.Rules;
 using DrunkenBestManEFSM.Domain.Transitions;
 
 namespace DrunkenBestManEFSM.Application.Services;
@@ -13,11 +15,16 @@ public sealed class GameActionService
 {
     private readonly GameSessionService sessionService;
     private readonly GameQueryService queryService;
+    private readonly IRandomProvider randomProvider;
 
-    public GameActionService(GameSessionService sessionService, GameQueryService queryService)
+    public GameActionService(
+        GameSessionService sessionService,
+        GameQueryService queryService,
+        IRandomProvider randomProvider)
     {
         this.sessionService = sessionService;
         this.queryService = queryService;
+        this.randomProvider = randomProvider;
     }
 
     public UseCaseResult<GameActionResultDto> TravelTo(Location destination, TravelMode travelMode) =>
@@ -36,6 +43,19 @@ public sealed class GameActionService
 
     public UseCaseResult<GameActionResultDto> BuyAlcohol() =>
         Execute(new TransitionRequest { ActionType = ActionType.BuyAlcohol });
+
+    public UseCaseResult<GameActionResultDto> RestAtStripClub()
+    {
+        var healthGain = randomProvider.Next(
+            GameEconomy.StripClubServiceMinHealthGain,
+            GameEconomy.StripClubServiceMaxHealthGain + 1);
+
+        return Execute(new TransitionRequest
+        {
+            ActionType = ActionType.RestAtStripClub,
+            HealthGain = healthGain
+        });
+    }
 
     public UseCaseResult<GameActionResultDto> PickUpRings() =>
         Execute(new TransitionRequest { ActionType = ActionType.PickUpRings });
