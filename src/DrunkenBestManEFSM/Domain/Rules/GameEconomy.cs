@@ -6,7 +6,7 @@ namespace DrunkenBestManEFSM.Domain.Rules;
 public static class GameEconomy
 {
     public const int ElectrolyteCost = 30;
-    public const int ElectrolyteHealthGain = 20;
+    public const int ElectrolyteHealthGain = 8;
     public const int ElectrolyteHangoverReduction = 30;
     public const int ElectrolyteDrunkennessReduction = 5;
     public const int ElectrolyteTimeCost = 2;
@@ -20,6 +20,11 @@ public static class GameEconomy
     public const int AlcoholHangoverReduction = 15;
     public const int AlcoholDrunkennessIncrease = 25;
     public const int AlcoholTimeGain = 5;
+
+    public const int StripClubServiceCost = 40;
+    public const int StripClubServiceMinHealthGain = 8;
+    public const int StripClubServiceMaxHealthGain = 18;
+    public const int StripClubServiceTimeCost = 6;
 
     public const int PickUpRingsTimeCost = 5;
     public const int WrongChurchTimePenalty = 5;

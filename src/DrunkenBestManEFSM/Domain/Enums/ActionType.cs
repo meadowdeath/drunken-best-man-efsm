@@ -9,6 +9,7 @@ public enum ActionType
     BuyElectrolytes,
     BuyFuel,
     BuyAlcohol,
+    RestAtStripClub,
     PickUpRings,
     EnterChurch,
     CheckStats

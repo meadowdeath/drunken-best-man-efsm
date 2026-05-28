@@ -19,4 +19,13 @@ public static class ShopRules
         && state.CharacterStats.Health > GameEconomy.AlcoholHealthCost
         && state.CharacterStats.RemainingTime < GameLimits.MaxRemainingTime
         && state.CharacterStats.Drunkenness < GameLimits.MaxDrunkenness;
+
+    public static bool CanRestAtStripClub(GameState state) =>
+        state.CharacterStats.Money >= GameEconomy.StripClubServiceCost
+        && state.CharacterStats.Health < GameLimits.MaxHealth
+        && state.CharacterStats.RemainingTime > GameEconomy.StripClubServiceTimeCost;
+
+    public static bool IsValidStripClubHealthGain(int healthGain) =>
+        healthGain >= GameEconomy.StripClubServiceMinHealthGain
+        && healthGain <= GameEconomy.StripClubServiceMaxHealthGain;
 }

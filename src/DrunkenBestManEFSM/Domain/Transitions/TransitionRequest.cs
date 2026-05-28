@@ -14,5 +14,7 @@ public sealed class TransitionRequest
 
     public TravelMode? TravelMode { get; set; }
 
+    public int? HealthGain { get; set; }
+
     public RandomEventResult? RandomEvent { get; set; }
 }

@@ -19,6 +19,7 @@ public static class EfsmTransitionResolver
             ActionType.BuyElectrolytes => ResolveBuyElectrolytes(state, request),
             ActionType.BuyFuel => ResolveBuyFuel(state, request),
             ActionType.BuyAlcohol => ResolveBuyAlcohol(state, request),
+            ActionType.RestAtStripClub => ResolveRestAtStripClub(state, request),
             ActionType.PickUpRings => ResolvePickUpRings(state, request),
             ActionType.EnterChurch => ResolveEnterChurch(state, request),
             ActionType.CheckStats => ResolveCheckStats(state),
@@ -135,6 +136,39 @@ public static class EfsmTransitionResolver
 
         ShopEffects.ApplyBuyAlcohol(state);
         return CompleteTurn(state, previousLocation, request.RandomEvent, "Actions.Shop.BuyAlcohol.Success");
+    }
+
+    private static ActionResult ResolveRestAtStripClub(GameState state, TransitionRequest request)
+    {
+        var previousLocation = state.CurrentLocation;
+
+        if (state.CurrentLocation != Location.StripClub)
+        {
+            return CreateFailureResult(state, previousLocation, "Rules.StripClub.WrongLocation");
+        }
+
+        if (state.CharacterStats.Money < GameEconomy.StripClubServiceCost)
+        {
+            return CreateFailureResult(state, previousLocation, "Rules.StripClub.NotEnoughMoney");
+        }
+
+        if (state.CharacterStats.Health >= GameLimits.MaxHealth)
+        {
+            return CreateFailureResult(state, previousLocation, "Rules.StripClub.HealthFull");
+        }
+
+        if (state.CharacterStats.RemainingTime <= GameEconomy.StripClubServiceTimeCost)
+        {
+            return CreateFailureResult(state, previousLocation, "Rules.StripClub.NotEnoughTime");
+        }
+
+        if (request.HealthGain is null || !ShopRules.IsValidStripClubHealthGain(request.HealthGain.Value))
+        {
+            return CreateFailureResult(state, previousLocation, "Rules.StripClub.InvalidHealthGain");
+        }
+
+        ShopEffects.ApplyRestAtStripClub(state, request.HealthGain.Value);
+        return CompleteTurn(state, previousLocation, request.RandomEvent, "Actions.StripClub.Rest.Success");
     }
 
     private static ActionResult ResolvePickUpRings(GameState state, TransitionRequest request)

@@ -32,4 +32,11 @@ public static class ShopEffects
         StatEffects.AddDrunkenness(state.CharacterStats, GameEconomy.AlcoholDrunkennessIncrease);
         StatEffects.AddRemainingTime(state.CharacterStats, GameEconomy.AlcoholTimeGain);
     }
+
+    public static void ApplyRestAtStripClub(GameState state, int healthGain)
+    {
+        StatEffects.AddMoney(state.CharacterStats, -GameEconomy.StripClubServiceCost);
+        StatEffects.AddHealth(state.CharacterStats, healthGain);
+        StatEffects.AddRemainingTime(state.CharacterStats, -GameEconomy.StripClubServiceTimeCost);
+    }
 }
