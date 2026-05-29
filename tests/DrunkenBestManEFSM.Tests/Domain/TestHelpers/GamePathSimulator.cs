@@ -34,6 +34,13 @@ public sealed class GamePathSimulator
     public ActionResult BuyAlcohol() =>
         Resolve(new TransitionRequest { ActionType = ActionType.BuyAlcohol });
 
+    public ActionResult RestAtStripClub(int healthGain) =>
+        Resolve(new TransitionRequest
+        {
+            ActionType = ActionType.RestAtStripClub,
+            HealthGain = healthGain
+        });
+
     public ActionResult PickUpRings() =>
         Resolve(new TransitionRequest { ActionType = ActionType.PickUpRings });
 
