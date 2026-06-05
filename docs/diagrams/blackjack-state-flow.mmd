@@ -1,0 +1,20 @@
+stateDiagram-v2
+    [*] --> WaitingForBet
+
+    WaitingForBet --> InitialDeal: PlaceBet [valid bet]
+    WaitingForBet --> Finished: Leave
+
+    InitialDeal --> PlayerTurn: cards dealt
+    InitialDeal --> Finished: natural outcome
+
+    PlayerTurn --> PlayerTurn: Hit [hand < 21]
+    PlayerTurn --> Finished: Hit [bust]
+    PlayerTurn --> DealerTurn: Stand
+    PlayerTurn --> DealerTurn: reaches 21
+
+    DealerTurn --> DealerTurn: dealer value < 17 / draw card
+    DealerTurn --> Resolving: dealer value >= 17
+
+    Resolving --> Finished: determine result
+
+    Finished --> [*]

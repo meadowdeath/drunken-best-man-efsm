@@ -1,0 +1,11 @@
+flowchart TD
+    Main["Main Game EFSM"] --> Casino["CurrentLocation = Casino"]
+    Casino --> Select["Player selects PlayBlackjack"]
+    Select --> Create["Create BlackjackGameState"]
+    Create --> Nested["Nested Blackjack EFSM runs"]
+    Nested --> Result["Produce BlackjackRoundResult"]
+    Result --> Apply["Apply result to main GameState"]
+    Apply --> Passive["Apply passive effects"]
+    Passive --> Outcome["Check main-game victory/defeat"]
+    Outcome --> Resume["Resume main game at Casino"]
+    Resume --> Optional["Blackjack remains optional"]

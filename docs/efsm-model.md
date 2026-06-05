@@ -16,6 +16,8 @@ The correct church is selected randomly during gameplay from five possible churc
 
 The player starts at `StripClub`. The car also starts at `StripClub`. The player has limited fuel, enough to drive to the `GasStation`. The `StripClub` can also provide a costly recovery option that restores a random amount of health after the player spends some time enjoying a service offered by the venue. The player must eventually go to the `GasStation` to buy electrolytes and fuel, go to the `JewelryStore` to pick up the rings, identify the correct church, and reach it before losing by time, health, or dehydration.
 
+A future `Casino` location is planned as an optional high-risk way to obtain money. Its Blackjack game will be modeled as a nested EFSM that temporarily suspends normal main-game actions and returns a round result back to the main EFSM. See [Nested Blackjack EFSM](blackjack-efsm.md).
+
 ## EFSM Definition
 
 This game is not a simple finite state machine because transitions do not depend only on the current location and selected action. They also depend on extended game data such as health, hangover, drunkenness, fuel, money, remaining time, car location, rings, and memory.
@@ -78,6 +80,7 @@ Game locations:
 - GasStation
 - JewelryStore
 - Bar
+- Casino (planned)
 - LostLoveParish
 - ForbiddenRoseChapel
 - LastGoodbyeSanctuary
@@ -292,3 +295,4 @@ delta(CorrectChurch, EnterChurch, GameState)
 - [Turn flow](diagrams/turn-flow.mmd)
 - [Game map](diagrams/game-map.mmd)
 - [Resource pressure](diagrams/resource-pressure.mmd)
+- [Nested Blackjack EFSM](blackjack-efsm.md)

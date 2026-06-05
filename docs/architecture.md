@@ -111,6 +111,14 @@ Presentation must not directly modify `GameState`, directly access Domain transi
 
 It should stay small.
 
+## Nested Feature Modules
+
+Complex nested features may use subfolders inside each layer while preserving the same dependency direction. Blackjack is the first planned nested feature module and is documented as a nested EFSM inside the main game EFSM.
+
+Root files in each layer should continue representing the main game. Blackjack-specific files may later live under `Blackjack/` subfolders inside `Domain`, `Application`, and `Presentation`. Shared contracts such as `IRandomProvider` and shared result wrappers such as `UseCaseResult<T>` should remain outside Blackjack-specific folders.
+
+See [Nested Blackjack EFSM](blackjack-efsm.md).
+
 ## XML Text Strategy
 
 Narrative text will be stored in XML under:
