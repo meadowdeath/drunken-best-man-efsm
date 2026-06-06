@@ -32,6 +32,9 @@ public static class RouteCatalog
         AddNearRoute(routes, Location.StripClub, Location.Bar);
         AddMediumRoute(routes, Location.GasStation, Location.JewelryStore);
         AddNearRoute(routes, Location.GasStation, Location.Bar);
+        AddNearRoute(routes, Location.GasStation, Location.Casino);
+        AddNearRoute(routes, Location.Bar, Location.Casino);
+        AddMediumRoute(routes, Location.JewelryStore, Location.Casino);
         AddMediumRoute(routes, Location.JewelryStore, Location.LostLoveParish);
         AddMediumRoute(routes, Location.JewelryStore, Location.ForbiddenRoseChapel);
         AddMediumRoute(routes, Location.JewelryStore, Location.LastGoodbyeSanctuary);

@@ -3,6 +3,8 @@ using DrunkenBestManEFSM.Domain.Enums;
 using DrunkenBestManEFSM.Domain.Maps;
 using DrunkenBestManEFSM.Domain.Models;
 using DrunkenBestManEFSM.Domain.Results;
+using DrunkenBestManEFSM.Domain.Results.Blackjack;
+using DrunkenBestManEFSM.Domain.Enums.Blackjack;
 using DrunkenBestManEFSM.Domain.Rules;
 
 namespace DrunkenBestManEFSM.Domain.Transitions;
@@ -20,6 +22,7 @@ public static class EfsmTransitionResolver
             ActionType.BuyFuel => ResolveBuyFuel(state, request),
             ActionType.BuyAlcohol => ResolveBuyAlcohol(state, request),
             ActionType.RestAtStripClub => ResolveRestAtStripClub(state, request),
+            ActionType.PlayBlackjack => ResolvePlayBlackjack(state, request),
             ActionType.PickUpRings => ResolvePickUpRings(state, request),
             ActionType.EnterChurch => ResolveEnterChurch(state, request),
             ActionType.CheckStats => ResolveCheckStats(state),
@@ -171,6 +174,42 @@ public static class EfsmTransitionResolver
         return CompleteTurn(state, previousLocation, request.RandomEvent, "Actions.StripClub.Rest.Success");
     }
 
+    private static ActionResult ResolvePlayBlackjack(GameState state, TransitionRequest request)
+    {
+        var previousLocation = state.CurrentLocation;
+
+        if (!BlackjackMainGameRules.IsAtCasino(state))
+        {
+            return CreateFailureResult(state, previousLocation, "Rules.Blackjack.NotAtCasino");
+        }
+
+        if (request.BlackjackRoundResult is null)
+        {
+            return CreateFailureResult(state, previousLocation, "Rules.Blackjack.NoRoundResult");
+        }
+
+        var roundResult = request.BlackjackRoundResult;
+        if (roundResult.Result != BlackjackResult.Exited)
+        {
+            var failureMessageKey = GetBlackjackFailureMessageKey(state);
+            if (failureMessageKey is not null)
+            {
+                return CreateFailureResult(state, previousLocation, failureMessageKey);
+            }
+        }
+
+        BlackjackMainGameEffects.ApplyRoundResult(state, roundResult);
+
+        if (roundResult.TimeCost > 0)
+        {
+            TurnEffects.ApplyPassiveTurnEffects(state);
+            UpdateMemoryIfEligible(state);
+            UpdateGameOutcome(state);
+        }
+
+        return CreateSuccessResult(state, previousLocation, "Actions.Blackjack.Play.Success", randomEvent: null);
+    }
+
     private static ActionResult ResolvePickUpRings(GameState state, TransitionRequest request)
     {
         var previousLocation = state.CurrentLocation;
@@ -251,6 +290,23 @@ public static class EfsmTransitionResolver
         return TravelRules.CanTravel(state, travelMode, routeCost.TimeCost, routeCost.FuelCost)
             ? null
             : "Rules.Travel.CannotDrive";
+    }
+
+    private static string? GetBlackjackFailureMessageKey(GameState state)
+    {
+        if (!BlackjackMainGameRules.HasEnoughMoneyForBlackjack(state))
+        {
+            return "Rules.Blackjack.NotEnoughMoney";
+        }
+
+        if (!BlackjackMainGameRules.HasEnoughTimeForBlackjack(state))
+        {
+            return "Rules.Blackjack.NotEnoughTime";
+        }
+
+        return BlackjackMainGameRules.CanPlayBlackjack(state)
+            ? null
+            : "Rules.Blackjack.InvalidState";
     }
 
     private static ActionResult CompleteTurn(

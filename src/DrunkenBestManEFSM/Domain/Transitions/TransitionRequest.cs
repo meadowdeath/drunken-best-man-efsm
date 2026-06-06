@@ -1,5 +1,6 @@
 using DrunkenBestManEFSM.Domain.Enums;
 using DrunkenBestManEFSM.Domain.Results;
+using DrunkenBestManEFSM.Domain.Results.Blackjack;
 
 namespace DrunkenBestManEFSM.Domain.Transitions;
 
@@ -15,6 +16,8 @@ public sealed class TransitionRequest
     public TravelMode? TravelMode { get; set; }
 
     public int? HealthGain { get; set; }
+
+    public BlackjackRoundResult? BlackjackRoundResult { get; set; }
 
     public RandomEventResult? RandomEvent { get; set; }
 }

@@ -9,6 +9,7 @@ public enum Location
     GasStation,
     JewelryStore,
     Bar,
+    Casino,
     LostLoveParish,
     ForbiddenRoseChapel,
     LastGoodbyeSanctuary,
