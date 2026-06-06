@@ -3,6 +3,7 @@ using DrunkenBestManEFSM.Application.DTOs;
 using DrunkenBestManEFSM.Application.Results;
 using DrunkenBestManEFSM.Domain.Enums;
 using DrunkenBestManEFSM.Domain.Results;
+using DrunkenBestManEFSM.Domain.Results.Blackjack;
 using DrunkenBestManEFSM.Domain.Rules;
 using DrunkenBestManEFSM.Domain.Transitions;
 
@@ -65,6 +66,13 @@ public sealed class GameActionService
 
     public UseCaseResult<GameActionResultDto> CheckStats() =>
         Execute(new TransitionRequest { ActionType = ActionType.CheckStats });
+
+    public UseCaseResult<GameActionResultDto> ApplyBlackjackRoundResult(BlackjackRoundResult roundResult) =>
+        Execute(new TransitionRequest
+        {
+            ActionType = ActionType.PlayBlackjack,
+            BlackjackRoundResult = roundResult
+        });
 
     private UseCaseResult<GameActionResultDto> Execute(TransitionRequest request)
     {
