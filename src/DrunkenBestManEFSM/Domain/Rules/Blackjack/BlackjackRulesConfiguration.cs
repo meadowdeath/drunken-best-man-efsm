@@ -13,4 +13,6 @@ public static class BlackjackRulesConfiguration
     public const int FaceCardValue = 10;
     public const int AceHighValue = 11;
     public const int AceLowAdjustment = 10;
+    public const int BlackjackRoundTimeCost = 4;
+    public const int BlackjackExitTimeCost = 0;
 }
