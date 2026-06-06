@@ -13,4 +13,10 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Domain\Enums\BlackJack\" />
+    <Folder Include="Domain\Models\BlackJack\" />
+    <Folder Include="Domain\Rules\BlackJack\" />
+  </ItemGroup>
+
 </Project>
