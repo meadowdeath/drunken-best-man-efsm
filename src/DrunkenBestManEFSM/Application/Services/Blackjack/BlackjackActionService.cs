@@ -118,6 +118,7 @@ public sealed class BlackjackActionService
 
         if (isFinished)
         {
+            sessionService.StoreCompletedRoundResult(roundResult);
             sessionService.ClearRound();
         }
 

@@ -4,6 +4,7 @@ using DrunkenBestManEFSM.Application.Results;
 using DrunkenBestManEFSM.Application.Services;
 using DrunkenBestManEFSM.Domain.Enums;
 using DrunkenBestManEFSM.Presentation.Console;
+using DrunkenBestManEFSM.Presentation.Menus.Blackjack;
 using DrunkenBestManEFSM.Presentation.Renderers;
 
 namespace DrunkenBestManEFSM.Presentation.Menus;
@@ -19,6 +20,7 @@ public sealed class ConsoleGameMenu
     private readonly AvailableActionsRenderer actionsRenderer;
     private readonly AvailableDestinationsRenderer destinationsRenderer;
     private readonly ActionResultRenderer actionResultRenderer;
+    private readonly BlackjackMenu blackjackMenu;
 
     public ConsoleGameMenu(
         ConsoleInputReader inputReader,
@@ -29,7 +31,8 @@ public sealed class ConsoleGameMenu
         GameStatusRenderer statusRenderer,
         AvailableActionsRenderer actionsRenderer,
         AvailableDestinationsRenderer destinationsRenderer,
-        ActionResultRenderer actionResultRenderer)
+        ActionResultRenderer actionResultRenderer,
+        BlackjackMenu blackjackMenu)
     {
         this.inputReader = inputReader;
         this.printer = printer;
@@ -40,6 +43,7 @@ public sealed class ConsoleGameMenu
         this.actionsRenderer = actionsRenderer;
         this.destinationsRenderer = destinationsRenderer;
         this.actionResultRenderer = actionResultRenderer;
+        this.blackjackMenu = blackjackMenu;
     }
 
     public void Run()
@@ -81,8 +85,11 @@ public sealed class ConsoleGameMenu
             }
 
             var result = ExecuteAction(action);
-            actionResultRenderer.Render(result);
-            inputReader.WaitForEnter();
+            if (result is not null)
+            {
+                actionResultRenderer.Render(result);
+                inputReader.WaitForEnter();
+            }
         }
     }
 
@@ -97,7 +104,7 @@ public sealed class ConsoleGameMenu
         return actions[choice - 1];
     }
 
-    private UseCaseResult<GameActionResultDto> ExecuteAction(AvailableActionDto action) =>
+    private UseCaseResult<GameActionResultDto>? ExecuteAction(AvailableActionDto action) =>
         action.ActionType switch
         {
             ActionType.Travel => ExecuteTravel(),
@@ -105,6 +112,7 @@ public sealed class ConsoleGameMenu
             ActionType.BuyFuel => ExecutePurchase(ActionType.BuyFuel, actionService.BuyFuel),
             ActionType.BuyAlcohol => ExecutePurchase(ActionType.BuyAlcohol, actionService.BuyAlcohol),
             ActionType.RestAtStripClub => ExecutePurchase(ActionType.RestAtStripClub, actionService.RestAtStripClub),
+            ActionType.PlayBlackjack => ExecuteBlackjack(),
             ActionType.PickUpRings => ExecuteConfirmedAction(
                 "Actions.Rings.PickUp.Label",
                 "Menu.ConfirmRings",
@@ -116,6 +124,12 @@ public sealed class ConsoleGameMenu
             ActionType.CheckStats => actionService.CheckStats(),
             _ => actionService.CheckStats()
         };
+
+    private UseCaseResult<GameActionResultDto>? ExecuteBlackjack()
+    {
+        blackjackMenu.Run();
+        return null;
+    }
 
     private UseCaseResult<GameActionResultDto> ExecuteTravel()
     {

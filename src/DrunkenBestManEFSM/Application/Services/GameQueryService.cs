@@ -45,6 +45,7 @@ public sealed class GameQueryService
             CreateAction(ActionType.BuyFuel, IsAtGasStation(state) && ShopRules.CanBuyFuel(state), "Actions.Shop.BuyFuel.Label", GetFuelUnavailableReason(state)),
             CreateAction(ActionType.BuyAlcohol, state.CurrentLocation == Location.Bar && ShopRules.CanBuyAlcohol(state), "Actions.Shop.BuyAlcohol.Label", GetAlcoholUnavailableReason(state)),
             CreateAction(ActionType.RestAtStripClub, state.CurrentLocation == Location.StripClub && ShopRules.CanRestAtStripClub(state), "Actions.StripClub.Rest.Label", GetStripClubRestUnavailableReason(state)),
+            CreateAction(ActionType.PlayBlackjack, state.CurrentLocation == Location.Casino && BlackjackMainGameRules.CanPlayBlackjack(state), "Actions.Blackjack.Play.Label", GetBlackjackUnavailableReason(state)),
             CreateAction(ActionType.PickUpRings, RingRules.CanPickUpRings(state), "Actions.Rings.PickUp.Label", GetRingsUnavailableReason(state)),
             CreateAction(ActionType.EnterChurch, ChurchRules.CanEnterChurch(state), "Actions.Church.Enter.Label", ChurchRules.CanEnterChurch(state) ? null : "Rules.Church.NotAtChurch")
         ];
@@ -244,6 +245,23 @@ public sealed class GameQueryService
         return state.CharacterStats.RemainingTime > GameEconomy.StripClubServiceTimeCost
             ? null
             : "Rules.StripClub.NotEnoughTime";
+    }
+
+    private static string? GetBlackjackUnavailableReason(GameState state)
+    {
+        if (state.CurrentLocation != Location.Casino)
+        {
+            return "Rules.Blackjack.NotAtCasino";
+        }
+
+        if (!BlackjackMainGameRules.HasEnoughMoneyForBlackjack(state))
+        {
+            return "Rules.Blackjack.NotEnoughMoney";
+        }
+
+        return BlackjackMainGameRules.HasEnoughTimeForBlackjack(state)
+            ? null
+            : "Rules.Blackjack.NotEnoughTime";
     }
 
     private static string? GetRingsUnavailableReason(GameState state)

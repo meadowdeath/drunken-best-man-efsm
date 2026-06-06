@@ -48,6 +48,12 @@
   <Text key="UseCase.Game.NoActiveGame">Start a game before taking actions.</Text>
   <Text key="UseCase.Action.Completed">Action completed.</Text>
   <Text key="UseCase.Action.Failed">Action failed.</Text>
+  <Text key="UseCase.Blackjack.Started">Blackjack round started.</Text>
+  <Text key="UseCase.Blackjack.NoActiveRound">There is no active Blackjack round.</Text>
+  <Text key="UseCase.Blackjack.InvalidBet">That bet is not valid.</Text>
+  <Text key="UseCase.Blackjack.ActionCompleted">Blackjack action completed.</Text>
+  <Text key="UseCase.Blackjack.RoundFinished">Blackjack round finished.</Text>
+  <Text key="UseCase.Blackjack.DealerTurnLimitExceeded">Dealer turn limit exceeded.</Text>
 
   <Text key="Rules.Travel.InvalidDestination">That destination is not valid.</Text>
   <Text key="Rules.Travel.RouteNotFound">There is no known route to that destination.</Text>
@@ -76,6 +82,12 @@
   <Text key="Rules.StripClub.HealthFull">Your health is already full.</Text>
   <Text key="Rules.StripClub.NotEnoughTime">There is not enough time for that.</Text>
   <Text key="Rules.StripClub.InvalidHealthGain">The recovery amount is not valid.</Text>
+  <Text key="Actions.Blackjack.Play.Success">The Blackjack result is applied to the main game.</Text>
+  <Text key="Rules.Blackjack.NotAtCasino">Blackjack is only available at the casino.</Text>
+  <Text key="Rules.Blackjack.NoRoundResult">There is no completed Blackjack result to apply.</Text>
+  <Text key="Rules.Blackjack.NotEnoughMoney">You need more money to play Blackjack.</Text>
+  <Text key="Rules.Blackjack.NotEnoughTime">There is not enough time to play Blackjack.</Text>
+  <Text key="Rules.Blackjack.InvalidState">Blackjack cannot be played right now.</Text>
 
   <Text key="Actions.Rings.PickUp.Success">You pick up the wedding rings.</Text>
   <Text key="Rules.Rings.WrongLocation">The rings are waiting at the jewelry store.</Text>
@@ -102,6 +114,7 @@
   <Text key="Location.GasStation">Gas Station</Text>
   <Text key="Location.JewelryStore">Jewelry Store</Text>
   <Text key="Location.Bar">Bar</Text>
+  <Text key="Location.Casino">Casino</Text>
   <Text key="Location.LostLoveParish">Lost Love Parish</Text>
   <Text key="Location.ForbiddenRoseChapel">Forbidden Rose Chapel</Text>
   <Text key="Location.LastGoodbyeSanctuary">Last Goodbye Sanctuary</Text>
@@ -115,6 +128,7 @@
   <Text key="Action.BuyFuel">Buy Fuel</Text>
   <Text key="Action.BuyAlcohol">Buy Alcohol</Text>
   <Text key="Action.RestAtStripClub">Recover at Strip Club</Text>
+  <Text key="Action.PlayBlackjack">Play Blackjack</Text>
   <Text key="Action.PickUpRings">Pick Up Rings</Text>
   <Text key="Action.EnterChurch">Enter Church</Text>
   <Text key="Action.CheckStats">Check Stats</Text>
@@ -124,6 +138,7 @@
   <Text key="Actions.Shop.BuyFuel.Label">Buy Fuel</Text>
   <Text key="Actions.Shop.BuyAlcohol.Label">Buy Alcohol</Text>
   <Text key="Actions.StripClub.Rest.Label">Recover at Strip Club</Text>
+  <Text key="Actions.Blackjack.Play.Label">Play Blackjack</Text>
   <Text key="Actions.Rings.PickUp.Label">Pick Up Rings</Text>
   <Text key="Actions.Church.Enter.Label">Enter Church</Text>
   <Text key="Actions.CheckStats.Label">Check Stats</Text>
@@ -132,4 +147,51 @@
 
   <Text key="TravelMode.Walk">Walk</Text>
   <Text key="TravelMode.Drive">Drive</Text>
+
+  <Text key="Blackjack.Title">Blackjack</Text>
+  <Text key="Blackjack.Intro">Play a quick round for money, but every completed round costs time.</Text>
+  <Text key="Blackjack.PlaceBetPrompt">Enter bet amount or 0 to cancel: </Text>
+  <Text key="Blackjack.Cancel">Cancel</Text>
+  <Text key="Blackjack.Cancelled">Blackjack cancelled.</Text>
+  <Text key="Blackjack.InvalidBet">Invalid bet.</Text>
+  <Text key="Blackjack.InvalidOption">Invalid Blackjack option.</Text>
+  <Text key="Blackjack.PressEnter">Press Enter to continue...</Text>
+  <Text key="Blackjack.State.WaitingForBet">Waiting for Bet</Text>
+  <Text key="Blackjack.State.InitialDeal">Initial Deal</Text>
+  <Text key="Blackjack.State.PlayerTurn">Player Turn</Text>
+  <Text key="Blackjack.State.DealerTurn">Dealer Turn</Text>
+  <Text key="Blackjack.State.Resolving">Resolving</Text>
+  <Text key="Blackjack.State.Finished">Finished</Text>
+  <Text key="Blackjack.Action.Hit">Hit</Text>
+  <Text key="Blackjack.Action.Stand">Stand</Text>
+  <Text key="Blackjack.Action.Leave">Leave</Text>
+  <Text key="Blackjack.PlaceBet.Success">Bet accepted.</Text>
+  <Text key="Blackjack.PlaceBet.InvalidBet">That bet is not valid.</Text>
+  <Text key="Blackjack.Hit.Success">You draw a card.</Text>
+  <Text key="Blackjack.Hit.Bust">You bust.</Text>
+  <Text key="Blackjack.Hit.ReachedTwentyOne">You reach 21. The dealer acts.</Text>
+  <Text key="Blackjack.Stand.Success">You stand. The dealer acts.</Text>
+  <Text key="Blackjack.Dealer.Draw">The dealer draws.</Text>
+  <Text key="Blackjack.Round.PlayerWin">You win the round.</Text>
+  <Text key="Blackjack.Round.DealerWin">The dealer wins the round.</Text>
+  <Text key="Blackjack.Round.Draw">The round is a draw.</Text>
+  <Text key="Blackjack.Round.PlayerBlackjack">Blackjack. You win the round.</Text>
+  <Text key="Blackjack.Round.DealerBlackjack">Dealer has Blackjack.</Text>
+  <Text key="Blackjack.Leave.Success">You leave the table before betting.</Text>
+  <Text key="Blackjack.InvalidAction">That Blackjack action is not valid.</Text>
+  <Text key="Blackjack.InvalidState">That action is not valid in the current Blackjack state.</Text>
+  <Text key="Blackjack.Label.Bet">Bet:</Text>
+  <Text key="Blackjack.Label.State">State:</Text>
+  <Text key="Blackjack.Label.Dealer">Dealer</Text>
+  <Text key="Blackjack.Label.Player">Player</Text>
+  <Text key="Blackjack.Label.Value">Value:</Text>
+  <Text key="Blackjack.Label.HiddenCard">[Hidden]</Text>
+  <Text key="Blackjack.Label.Result">Result</Text>
+  <Text key="Blackjack.Result.None">No result yet.</Text>
+  <Text key="Blackjack.Result.PlayerWin">Player wins.</Text>
+  <Text key="Blackjack.Result.DealerWin">Dealer wins.</Text>
+  <Text key="Blackjack.Result.Draw">Draw.</Text>
+  <Text key="Blackjack.Result.PlayerBlackjack">Player Blackjack.</Text>
+  <Text key="Blackjack.Result.DealerBlackjack">Dealer Blackjack.</Text>
+  <Text key="Blackjack.Result.Exited">Exited.</Text>
 </GameTexts>

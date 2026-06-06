@@ -19,6 +19,7 @@ public sealed class BlackjackSessionService
 {
     private readonly IRandomProvider randomProvider;
     private BlackjackGameState? currentState;
+    private Domain.Results.Blackjack.BlackjackRoundResult? completedRoundResult;
 
     public BlackjackSessionService(IRandomProvider randomProvider)
     {
@@ -27,6 +28,8 @@ public sealed class BlackjackSessionService
 
     public UseCaseResult<BlackjackStatusDto> StartNewRound(int betAmount, int availableMoney)
     {
+        completedRoundResult = null;
+
         if (!BlackjackBetRules.IsValidBet(betAmount, availableMoney))
         {
             return UseCaseResult<BlackjackStatusDto>.Fail("UseCase.Blackjack.InvalidBet");
@@ -57,6 +60,7 @@ public sealed class BlackjackSessionService
         }
 
         currentState = state;
+        completedRoundResult = actionResult.RoundResult;
 
         return UseCaseResult<BlackjackStatusDto>.Ok(
             BlackjackQueryService.ToStatusDto(state),
@@ -70,6 +74,12 @@ public sealed class BlackjackSessionService
 
     public BlackjackGameState? GetCurrentState() =>
         currentState;
+
+    public Domain.Results.Blackjack.BlackjackRoundResult? GetCompletedRoundResult() =>
+        completedRoundResult;
+
+    public void StoreCompletedRoundResult(Domain.Results.Blackjack.BlackjackRoundResult? roundResult) =>
+        completedRoundResult = roundResult;
 
     public void ClearRound() =>
         currentState = null;
