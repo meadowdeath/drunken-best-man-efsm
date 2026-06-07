@@ -1,6 +1,7 @@
 using DrunkenBestManEFSM.Domain.Enums;
 using DrunkenBestManEFSM.Domain.Models;
 using DrunkenBestManEFSM.Domain.Results;
+using DrunkenBestManEFSM.Domain.Results.Blackjack;
 using DrunkenBestManEFSM.Domain.Rules;
 using DrunkenBestManEFSM.Domain.Transitions;
 
@@ -46,6 +47,25 @@ public sealed class GamePathSimulator
 
     public ActionResult EnterChurch() =>
         Resolve(new TransitionRequest { ActionType = ActionType.EnterChurch });
+
+    public ActionResult ApplyBlackjackResult(BlackjackRoundResult result) =>
+        Resolve(new TransitionRequest
+        {
+            ActionType = ActionType.PlayBlackjack,
+            BlackjackRoundResult = result
+        });
+
+    public ActionResult ApplyBlackjackWin(int betAmount = 10) =>
+        ApplyBlackjackResult(BlackjackRoundResultFactory.PlayerWin(betAmount));
+
+    public ActionResult ApplyBlackjackLoss(int betAmount = 10) =>
+        ApplyBlackjackResult(BlackjackRoundResultFactory.DealerWin(betAmount));
+
+    public ActionResult ApplyBlackjackDraw(int betAmount = 10) =>
+        ApplyBlackjackResult(BlackjackRoundResultFactory.Draw(betAmount));
+
+    public ActionResult ExitBlackjack() =>
+        ApplyBlackjackResult(BlackjackRoundResultFactory.Exited());
 
     private ActionResult Resolve(TransitionRequest request)
     {
