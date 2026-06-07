@@ -16,7 +16,7 @@ The correct church is selected randomly during gameplay from five possible churc
 
 The player starts at `StripClub`. The car also starts at `StripClub`. The player has limited fuel, enough to drive to the `GasStation`. The `StripClub` can also provide a costly recovery option that restores a random amount of health after the player spends some time enjoying a service offered by the venue. The player must eventually go to the `GasStation` to buy electrolytes and fuel, go to the `JewelryStore` to pick up the rings, identify the correct church, and reach it before losing by time, health, or dehydration.
 
-A future `Casino` location is planned as an optional high-risk way to obtain money. Its Blackjack game will be modeled as a nested EFSM that temporarily suspends normal main-game actions and returns a round result back to the main EFSM. See [Nested Blackjack EFSM](blackjack-efsm.md).
+The `Casino` location is an optional high-risk way to obtain money. Its Blackjack game is modeled as a nested EFSM that temporarily suspends normal main-game actions and returns a round result back to the main EFSM. See [Nested Blackjack EFSM](blackjack-efsm.md).
 
 ## EFSM Definition
 
@@ -80,7 +80,7 @@ Game locations:
 - GasStation
 - JewelryStore
 - Bar
-- Casino (planned)
+- Casino
 - LostLoveParish
 - ForbiddenRoseChapel
 - LastGoodbyeSanctuary
@@ -138,6 +138,7 @@ Location actions:
 - `BuyFuel`
 - `BuyAlcohol`
 - `RestAtStripClub`
+- `PlayBlackjack`
 - `PickUpRings`
 - `EnterChurch`
 - `CheckStats`
@@ -166,6 +167,32 @@ Vomit is a random event that becomes more likely when drunkenness is high. It re
 Walking does not consume fuel, consumes more time, leaves the car behind, has a higher chance to find money, and may worsen hangover slightly because of physical exhaustion.
 
 Driving consumes fuel, consumes less time, requires the car to be at the current location, requires enough fuel, requires drunkenness below the driving limit, moves the car to the destination, and has a lower chance to find money.
+
+Casino Blackjack is optional. A completed Blackjack round can increase, decrease, or preserve money depending on the result, but it consumes time unless the player exits before betting. The main EFSM applies the money and time changes, then applies normal passive effects and defeat checks.
+
+## Nested EFSM: Casino Blackjack
+
+`Casino` is a normal location in the main EFSM. When the player chooses `PlayBlackjack`, the nested Blackjack EFSM becomes active. While it runs, it owns Blackjack-specific state and normal main-game actions are suspended. When the nested machine reaches `Finished`, it produces a `BlackjackRoundResult`, and the main EFSM resumes at `Casino`.
+
+Blackjack EFSM owns:
+
+- `BlackjackState`
+- `PlayerHand`
+- `DealerHand`
+- `Deck`
+- `BetAmount`
+- `BlackjackResult`
+
+Main EFSM owns:
+
+- `Money`
+- `RemainingTime`
+- `Hangover`
+- `Drunkenness`
+- `CurrentLocation`
+- `GameResult`
+
+The boundary between both machines is `BlackjackRoundResult`. The nested machine decides cards, hand values, dealer behavior, and the round result. The main EFSM decides how that result affects main-game resources and whether the overall game continues or ends.
 
 ## Car Location
 

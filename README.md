@@ -2,7 +2,7 @@
 
 DrunkenBestManEFSM is a C# console game that models a turn-based Extended Finite State Machine.
 
-A drunken best man wakes up at a strip club. He must recover enough to remember the correct church, pick up the wedding rings, manage fuel, money, health, hangover, and time, then reach the correct church before losing.
+A drunken best man wakes up at a strip club. He must recover enough to remember the correct church, pick up the wedding rings, manage fuel, money, health, hangover, and time, then reach the correct church before losing. The game also includes an optional Casino location with a nested Blackjack EFSM for risky money recovery.
 
 ## Project Purpose
 
@@ -34,6 +34,18 @@ delta(CurrentLocation, Action, GameState) [Condition] / Effect -> NewLocation, U
 
 This is an EFSM because transitions depend not only on location and action, but also on `Health`, `Hangover`, `Drunkenness`, `Fuel`, `Money`, `RemainingTime`, `CarLocation`, `HasRings`, and `CorrectChurchKnown`.
 
+The Casino feature adds a nested EFSM:
+
+```text
+Main EFSM:
+delta(Location, Action, GameState) [Condition] / Effect -> UpdatedGameState
+
+Nested Blackjack EFSM:
+delta(BlackjackState, BlackjackAction, BlackjackGameState) [Condition] / Effect -> UpdatedBlackjackGameState
+```
+
+The main EFSM controls the journey, resources, locations, and victory or defeat. The nested Blackjack EFSM controls one Blackjack round inside `Casino`. When the round finishes, it returns a `BlackjackRoundResult`; the main EFSM consumes that boundary object and applies money, time, passive effects, and defeat checks.
+
 ## Gameplay Overview
 
 - Start at `StripClub`.
@@ -42,9 +54,13 @@ This is an EFSM because transitions depend not only on location and action, but 
 - Spend money at `StripClub` for a risky recovery option that restores a random amount of health.
 - Buy electrolytes and fuel at `GasStation`.
 - Buy alcohol at `Bar` as a risky shortcut.
+- Visit `Casino` as an optional risky location.
+- Play simplified Blackjack at `Casino` to try to gain money.
 - Pick up rings at `JewelryStore`.
 - Find or remember the correct church.
 - Enter the correct church with rings to win.
+
+Winning Blackjack increases money. Losing decreases money. Draws keep money unchanged, but every completed round consumes time. The Casino can help recover financially, but abusing it can cause defeat through time loss, money loss, and passive hangover pressure.
 
 ## Core Mechanics
 
@@ -77,6 +93,14 @@ The player must pick up the rings at `JewelryStore`. Reaching the correct church
 ### Correct Church
 
 The correct church is random. The player can remember it only when hangover and drunkenness are low enough.
+
+### Casino and Blackjack
+
+`Casino` is an optional location, not a required final boss. It provides a risk/reward resource mechanic when the player needs money.
+
+Blackjack is a simplified card game nested inside the main EFSM. The player can `Hit` or `Stand`, the dealer draws until reaching `17` or more, and the round produces `PlayerWin`, `DealerWin`, `Draw`, `PlayerBlackjack`, `DealerBlackjack`, or `Exited`.
+
+The nested machine does not directly own the main game state. It produces a `BlackjackRoundResult`; the main EFSM then applies money and time changes, passive turn effects, and defeat checks while keeping the player at `Casino`.
 
 ## Victory and Defeat
 
@@ -112,30 +136,46 @@ Infrastructure -> Application contracts
 
 The Domain layer does not depend on console, XML, infrastructure, or presentation concerns.
 
+Blackjack is organized as a feature submodule inside the existing layers:
+
+- `Domain/Blackjack`: card models, rules, transitions, and round results.
+- `Application/Blackjack`: Blackjack session, action, query services, and DTOs.
+- `Presentation/Blackjack`: Blackjack menu and renderer.
+- `Infrastructure`: shared XML and random-provider implementations; Application uses the random-provider abstraction for shuffling.
+
 ## Repository Structure
 
 ```text
 src/DrunkenBestManEFSM/
 |-- Domain/
 |   |-- Enums/
+|   |   `-- Blackjack/
 |   |-- Models/
+|   |   `-- Blackjack/
 |   |-- Rules/
+|   |   `-- Blackjack/
 |   |-- Effects/
 |   |-- Maps/
 |   |-- Results/
+|   |   `-- Blackjack/
 |   `-- Transitions/
+|       `-- Blackjack/
 |-- Application/
 |   |-- Contracts/
 |   |-- DTOs/
+|   |   `-- Blackjack/
 |   |-- Results/
 |   `-- Services/
+|       `-- Blackjack/
 |-- Infrastructure/
 |   |-- Random/
 |   `-- Xml/
 |-- Presentation/
 |   |-- Console/
 |   |-- Menus/
+|   |   `-- Blackjack/
 |   `-- Renderers/
+|       `-- Blackjack/
 |-- Resources/
 |   `-- Texts/
 `-- Program.cs
@@ -187,7 +227,7 @@ Or run the test project directly:
 dotnet test tests/DrunkenBestManEFSM.Tests/DrunkenBestManEFSM.Tests.csproj
 ```
 
-The test suite includes Domain rule tests and balance/path simulation tests.
+The test suite includes main Domain rule tests, balance/path simulations, Blackjack rule tests, Blackjack state-transition tests, and Casino risk/reward balance tests.
 
 ## Diagrams
 
@@ -195,11 +235,14 @@ Existing documentation:
 
 - [EFSM model](docs/efsm-model.md)
 - [Architecture](docs/architecture.md)
+- [Nested Blackjack EFSM](docs/blackjack-efsm.md)
 - [EFSM state flow](docs/diagrams/efsm-state-flow.mmd)
 - [Turn flow](docs/diagrams/turn-flow.mmd)
 - [Layered architecture](docs/diagrams/layered-architecture.mmd)
 - [Game map](docs/diagrams/game-map.mmd)
 - [Resource pressure](docs/diagrams/resource-pressure.mmd)
+- [Nested EFSM flow](docs/diagrams/nested-efsm-flow.mmd)
+- [Blackjack state flow](docs/diagrams/blackjack-state-flow.mmd)
 - [State ownership](docs/diagrams/state-ownership.mmd)
 
 High-level turn loop:
@@ -226,9 +269,10 @@ The project was built incrementally using small commits:
 - EFSM documentation
 - Architecture documentation
 - Domain enums, models, rules, effects, maps, and transitions
+- Nested Blackjack EFSM and Casino integration
 - Application use cases
 - Infrastructure XML loading
 - Presentation console UI
-- Tests
-- Balance simulations
+- Domain and Blackjack tests
+- Balance and Casino risk/reward simulations
 - README documentation

@@ -4,8 +4,10 @@ flowchart TD
     Select --> Create["Create BlackjackGameState"]
     Create --> Nested["Nested Blackjack EFSM runs"]
     Nested --> Result["Produce BlackjackRoundResult"]
-    Result --> Apply["Apply result to main GameState"]
-    Apply --> Passive["Apply passive effects"]
-    Passive --> Outcome["Check main-game victory/defeat"]
-    Outcome --> Resume["Resume main game at Casino"]
+    Result --> Apply["Apply Money and RemainingTime"]
+    Apply --> HasTime{"TimeCost > 0?"}
+    HasTime -- "Yes" --> Passive["Apply passive effects"]
+    HasTime -- "No" --> Resume["Resume main game at Casino"]
+    Passive --> Outcome["Check main-game defeat"]
+    Outcome --> Resume
     Resume --> Optional["Blackjack remains optional"]

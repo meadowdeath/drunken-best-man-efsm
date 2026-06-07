@@ -5,6 +5,10 @@ flowchart TD
     Electrolytes["Buy Electrolytes"]
     StripClub["Strip Club Recovery"]
     Alcohol["Buy Alcohol"]
+    Casino["Casino Blackjack"]
+    BlackjackWin["Win: Money increases, Time decreases"]
+    BlackjackLose["Lose: Money decreases, Time decreases"]
+    BlackjackDraw["Draw: Money same, Time decreases"]
     Vomit["Vomit Event"]
     Drive["Driving"]
     Walk["Walking"]
@@ -18,6 +22,12 @@ flowchart TD
     StripClub -->|"costs money and time"| Hangover
     Alcohol -->|"RemainingTime up"| Drunkenness
     Alcohol -->|"Health down"| Hangover
+    Casino --> BlackjackWin
+    Casino --> BlackjackLose
+    Casino --> BlackjackDraw
+    BlackjackWin -->|"completed round"| Turn
+    BlackjackLose -->|"resource pressure"| Defeat
+    BlackjackDraw -->|"completed round"| Turn
     Drunkenness -->|"too high blocks"| Drive
     Drunkenness -->|"higher risk"| Vomit
     Vomit -->|"Health down, Hangover up"| Defeat

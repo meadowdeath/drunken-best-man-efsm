@@ -1,6 +1,6 @@
 # Architecture
 
-DrunkenBestManEFSM will use a layered architecture with a clear dependency direction. The goal is to keep EFSM game rules explicit, testable, and separate from console input/output and XML loading.
+DrunkenBestManEFSM uses a layered architecture with a clear dependency direction. The goal is to keep EFSM game rules explicit, testable, and separate from console input/output and XML loading.
 
 This is not full Clean Architecture, but it follows a similar dependency principle:
 
@@ -33,21 +33,21 @@ Rules:
 
 The Domain layer contains EFSM concepts and pure game rules.
 
-It will contain entities and models such as:
+It contains entities and models such as:
 
 - `CharacterStats`
 - `GameState`
 - `Transition`
 - `TransitionResult`
 
-It will contain enums such as:
+It contains enums such as:
 
 - `Location`
 - `ActionType`
 - `TravelMode`
 - `GameResult`
 
-It will contain rules such as:
+It contains rules such as:
 
 - Victory conditions
 - Defeat conditions
@@ -55,7 +55,7 @@ It will contain rules such as:
 - Memory eligibility
 - Shopping conditions
 
-It will contain action effects such as:
+It contains action effects such as:
 
 - Applying electrolytes
 - Applying alcohol
@@ -63,7 +63,7 @@ It will contain action effects such as:
 - Applying vomit effects
 - Applying travel costs
 
-It will also contain travel map and route cost definitions.
+It also contains travel map and route cost definitions.
 
 The Domain layer must not use `Console`, read XML, load files, depend on infrastructure, or require UI or file system access. It must remain testable without the console or external files.
 
@@ -93,7 +93,7 @@ Example use cases:
 
 The Infrastructure layer contains technical implementations.
 
-It will load narrative texts from XML and implement `ITextProvider`. It may later contain persistence, configuration loading, random provider implementation, or logging adapters.
+It loads narrative texts from XML and implements `ITextProvider`. It also contains the random provider implementation and may later contain persistence, configuration loading, or logging adapters.
 
 Infrastructure must not decide game rules, print UI directly, or contain EFSM transition logic.
 
@@ -113,9 +113,16 @@ It should stay small.
 
 ## Nested Feature Modules
 
-Complex nested features may use subfolders inside each layer while preserving the same dependency direction. Blackjack is the first planned nested feature module and is documented as a nested EFSM inside the main game EFSM.
+Complex nested features may use subfolders inside each layer while preserving the same dependency direction. Blackjack is the first nested feature module and is documented as a nested EFSM inside the main game EFSM.
 
-Root files in each layer should continue representing the main game. Blackjack-specific files may later live under `Blackjack/` subfolders inside `Domain`, `Application`, and `Presentation`. Shared contracts such as `IRandomProvider` and shared result wrappers such as `UseCaseResult<T>` should remain outside Blackjack-specific folders.
+Root files in each layer continue representing the main game. Blackjack-specific files live under `Blackjack/` subfolders inside `Domain`, `Application`, and `Presentation`. Shared contracts such as `IRandomProvider` and shared result wrappers such as `UseCaseResult<T>` remain outside Blackjack-specific folders.
+
+- `Domain/Blackjack`: card models, hand rules, bet rules, dealer rules, outcome rules, nested transitions, and round results.
+- `Application/Blackjack`: session orchestration, action use cases, query use cases, and DTO conversion.
+- `Presentation/Blackjack`: Blackjack menu flow and rendering.
+- `Infrastructure`: shared technical implementations, including XML text loading and random-provider support.
+
+Blackjack does not make Domain depend on Presentation, XML, Console, or Infrastructure. Application coordinates the nested session and passes completed `BlackjackRoundResult` values back to the main EFSM through Domain transitions.
 
 See [Nested Blackjack EFSM](blackjack-efsm.md).
 
@@ -157,9 +164,27 @@ Intended structure:
 ```text
 src/DrunkenBestManEFSM/
 |-- Domain/
+|   |-- Enums/
+|   |   `-- Blackjack/
+|   |-- Models/
+|   |   `-- Blackjack/
+|   |-- Rules/
+|   |   `-- Blackjack/
+|   |-- Results/
+|   |   `-- Blackjack/
+|   `-- Transitions/
+|       `-- Blackjack/
 |-- Application/
+|   |-- DTOs/
+|   |   `-- Blackjack/
+|   `-- Services/
+|       `-- Blackjack/
 |-- Infrastructure/
 |-- Presentation/
+|   |-- Menus/
+|   |   `-- Blackjack/
+|   `-- Renderers/
+|       `-- Blackjack/
 |-- Resources/
 |   `-- Texts/
 `-- Program.cs
@@ -171,8 +196,6 @@ docs/
 
 tests/
 ```
-
-Folders may currently contain `.gitkeep` files until implementation commits add real files.
 
 ## Why This Structure Matters
 

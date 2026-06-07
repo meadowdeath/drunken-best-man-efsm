@@ -3,6 +3,7 @@ flowchart LR
     GasStation["GasStation"]
     JewelryStore["JewelryStore"]
     Bar["Bar"]
+    Casino["Casino"]
     LostLoveParish["LostLoveParish"]
     ForbiddenRoseChapel["ForbiddenRoseChapel"]
     LastGoodbyeSanctuary["LastGoodbyeSanctuary"]
@@ -13,6 +14,9 @@ flowchart LR
     StripClub ---|"Near"| Bar
     GasStation ---|"Medium"| JewelryStore
     GasStation ---|"Near"| Bar
+    GasStation ---|"Near"| Casino
+    Bar ---|"Near"| Casino
+    JewelryStore ---|"Medium"| Casino
     JewelryStore ---|"Medium"| LostLoveParish
     JewelryStore ---|"Medium"| ForbiddenRoseChapel
     JewelryStore ---|"Medium"| LastGoodbyeSanctuary

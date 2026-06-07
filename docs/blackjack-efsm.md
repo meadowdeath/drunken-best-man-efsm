@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Blackjack is a planned optional Casino feature for DrunkenBestManEFSM. It gives the player a high-risk way to obtain money during the main game.
+Blackjack is an optional Casino feature for DrunkenBestManEFSM. It gives the player a high-risk way to obtain money during the main game.
 
 The Casino is not mandatory and is not a final boss. The player must be able to complete the main game without visiting it. Its purpose is to create a strategic tradeoff:
 
@@ -12,7 +12,7 @@ The Casino is not mandatory and is not a final boss. The player must be able to 
 - Time passing still worsens the main-game condition through passive effects.
 - Spending too much time or money in the Casino can make the wedding objective impossible.
 
-Money gained from Blackjack can later be used in the main game to buy fuel, electrolytes, or alcohol.
+Money gained from Blackjack can be used in the main game to buy fuel, electrolytes, or alcohol.
 
 ## Why Blackjack Is a Nested State Machine
 
@@ -99,7 +99,7 @@ Accepted only while `WaitingForBet` and only when the bet is valid.
 
 `Hit`
 
-Adds one card to the player's hand. If the hand exceeds `21`, the round finishes with `DealerWin`. If the hand reaches exactly `21`, the initial version may automatically transition to `DealerTurn`.
+Adds one card to the player's hand. If the hand exceeds `21`, the round finishes with `DealerWin`. If the hand reaches exactly `21`, the nested EFSM transitions to `DealerTurn`.
 
 `Stand`
 
@@ -107,11 +107,11 @@ Ends the player's turn and activates `DealerTurn`.
 
 `Leave`
 
-Allows the player to cancel before a round begins. The initial version should not allow abandoning a round after cards are dealt.
+Allows the player to cancel before a round begins. The initial version does not allow abandoning a round after cards are dealt.
 
 ## Blackjack Extended State
 
-Proposed `BlackjackGameState`:
+Implemented `BlackjackGameState`:
 
 - `BlackjackState State`
 - `BlackjackHand PlayerHand`
@@ -122,7 +122,7 @@ Proposed `BlackjackGameState`:
 
 `BlackjackGameState` belongs only to the nested machine. Blackjack-specific card and deck data should not be placed directly inside the main `GameState`.
 
-The main `GameState` should only need to know whether a Blackjack session is active when integration is eventually implemented.
+The main `GameState` does not store player cards, dealer cards, or deck data. Application manages the active nested session and passes a completed `BlackjackRoundResult` back to the main EFSM.
 
 ## Card and Hand Rules
 
@@ -161,7 +161,7 @@ Hand rules:
 - Detect natural Blackjack.
 - Correctly handle one or multiple Aces.
 
-Natural Blackjack may initially be treated as a normal win if the implementation needs to stay simple, but the result model should leave room for `PlayerBlackjack` and `DealerBlackjack`.
+Natural Blackjack is represented explicitly through `PlayerBlackjack` and `DealerBlackjack`.
 
 ## Dealer Behavior
 
@@ -190,19 +190,21 @@ Implementation should avoid hiding the nested-machine behavior inside Presentati
 
 ## Betting and Economy
 
-Initial proposed values:
+Implemented values:
 
 - `MinimumBet = 10`
 - `MaximumBet = 30`
 - `BlackjackRoundTimeCost = 4 minutes`
 - `BlackjackExitTimeCost = 0 minutes` when leaving before betting
 
-Recommended net result model:
+Net result model:
 
 | Result | MoneyChange |
 | --- | --- |
 | `PlayerWin` | `+BetAmount` |
+| `PlayerBlackjack` | `+BetAmount` |
 | `DealerWin` | `-BetAmount` |
+| `DealerBlackjack` | `-BetAmount` |
 | `Draw` | `0` |
 | `Exited` | `0` |
 
@@ -214,7 +216,7 @@ Example with initial `Money = 50` and `Bet = 10`:
 - `DealerWin`: final money is `40`.
 - `Draw`: final money is `50`.
 
-Each completed round consumes `BlackjackRoundTimeCost` regardless of result. After a completed round, the main EFSM should apply:
+Each completed round consumes `BlackjackRoundTimeCost` regardless of result. After a completed round, the main EFSM applies:
 
 - Remaining time reduction.
 - Passive hangover increase.
@@ -231,7 +233,7 @@ No fixed round limit is needed initially. The player may continue playing while:
 
 ## Round Results
 
-Proposed `BlackjackResult` values:
+Implemented `BlackjackResult` values:
 
 - `None`
 - `PlayerWin`
@@ -241,7 +243,7 @@ Proposed `BlackjackResult` values:
 - `DealerBlackjack`
 - `Exited`
 
-Proposed result passed from the nested machine to the main machine:
+Result passed from the nested machine to the main machine:
 
 `BlackjackRoundResult`
 
@@ -293,13 +295,13 @@ Infrastructure:
 
 Main Domain:
 
-- Add `Casino` location later.
-- Apply `BlackjackRoundResult` to the main `GameState` later.
-- Apply normal passive effects and outcome checks.
+- Contains the `Casino` location and `PlayBlackjack` action.
+- Applies `BlackjackRoundResult` to the main `GameState`.
+- Applies normal passive effects and outcome checks.
 
-## Proposed Folder Organization
+## Folder Organization
 
-Blackjack should use subfolders inside the existing layers only where needed.
+Blackjack uses subfolders inside the existing layers where needed.
 
 ```text
 Domain/
@@ -308,8 +310,6 @@ Domain/
 |-- Models/
 |   `-- Blackjack/
 |-- Rules/
-|   `-- Blackjack/
-|-- Effects/
 |   `-- Blackjack/
 |-- Results/
 |   `-- Blackjack/
@@ -335,7 +335,7 @@ Do not create `MainGame` subfolders at this stage.
 
 ## Simplified Initial Scope
 
-The initial version should include:
+The implemented initial version includes:
 
 - Single player.
 - One dealer.
@@ -346,7 +346,7 @@ The initial version should include:
 - Net money result.
 - Round time cost.
 
-The initial version must not implement:
+The initial version does not implement:
 
 - Split.
 - Double down.
@@ -369,14 +369,9 @@ The player must still be able to win the main game without visiting the Casino.
 - [Blackjack state flow](diagrams/blackjack-state-flow.mmd)
 - [Nested EFSM flow](diagrams/nested-efsm-flow.mmd)
 
-## Planned Implementation Order
+## Implementation Boundaries
 
-1. Add Blackjack enums and result types.
-2. Add card, hand, deck, and nested state models.
-3. Add Blackjack rules and hand evaluation.
-4. Add nested Blackjack effects and transition resolver.
-5. Add Application services and DTOs for Blackjack.
-6. Add Presentation menu and renderers for Blackjack.
-7. Add Casino to the main game map and available actions.
-8. Integrate `BlackjackRoundResult` back into the main EFSM.
-9. Add tests for Blackjack rules, transitions, and balance.
+- Domain owns card values, hand evaluation, dealer rules, outcome rules, and nested state transitions.
+- Application creates and shuffles decks through `IRandomProvider`, stores the active session, coordinates player actions, and advances dealer turns by calling Domain transitions.
+- Presentation displays the Blackjack menu, cards, visible dealer information, and action results.
+- The main EFSM consumes only `BlackjackRoundResult`; it does not draw cards, calculate hand values, or decide Blackjack winners.
